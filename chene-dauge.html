@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chêne d'Auge, Nobase</title>
+  <meta name="description" content="Présentation du projet Chêne d'Auge, application web de réservation pour maison d'hôte premium en Normandie, développée sur Bubble.io.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:          #f36dd4;
+      --pink-mid:      #f5a0de;
+      --pink-soft:     #f9c4ea;
+      --pink-bg:       #fce8f7;
+      --pink-lightest: #fef5fc;
+      --teal:          #83abab;
+      --teal-light:    #c1d5d5;
+      --teal-dark:     #5a8a8a;
+      --yellow:        #fedc5a;
+      --yellow-dark:   #e8c535;
+      --dark:          #2c2c3e;
+      --text:          #2c2c3e;
+      --text-muted:    #7b7b8e;
+      --white:         #ffffff;
+      --gray-bg:       #f8f4fb;
+      --border:        rgba(243,109,212,0.12);
+      /* Chêne d'Auge accent */
+      --olive:         #6b7c3e;
+      --olive-light:   #8a9c55;
+      --olive-bg:      #f4f6ed;
+      --olive-border:  rgba(107,124,62,0.15);
+
+      --shadow-sm: 0 2px 8px rgba(180,80,160,0.07);
+      --shadow:    0 4px 24px rgba(180,80,160,0.10);
+      --shadow-lg: 0 12px 48px rgba(180,80,160,0.14);
+
+      --radius-sm:   10px;
+      --radius:      18px;
+      --radius-lg:   28px;
+      --radius-pill: 100px;
+
+      --nav-h: 68px;
+      --tr: 0.28s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1280px; width: 100%; margin: 0 auto; padding: 0 48px; }
+    @media (max-width: 900px) { .container { padding: 0 28px; } }
+    @media (max-width: 600px) { .container { padding: 0 20px; } }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 26px;
+      border-radius: var(--radius-pill);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700; font-size: 0.85rem; letter-spacing: 0.01em;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform var(--tr), box-shadow var(--tr), filter var(--tr);
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn:active { transform: none; }
+    .btn-teal   { background: var(--teal); color: var(--white); }
+    .btn-teal:hover { background: var(--teal-dark); }
+    .btn-pink   { background: var(--pink); color: var(--white); }
+    .btn-pink:hover { filter: brightness(1.08); }
+    .btn-ghost  { background: transparent; color: var(--text); border: 1.5px solid rgba(0,0,0,0.15); }
+    .btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── REVEAL ── */
+    .rev { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .rev.on { opacity: 1; transform: none; }
+    .d1 { transition-delay: .08s; }
+    .d2 { transition-delay: .16s; }
+    .d3 { transition-delay: .24s; }
+    .d4 { transition-delay: .32s; }
+
+    /* ── LABELS ── */
+    .label {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em;
+      padding: 5px 14px; border-radius: var(--radius-pill); margin-bottom: 18px;
+    }
+    .label-pink   { background: var(--pink-bg); color: var(--pink); }
+    .label-teal   { background: rgba(131,171,171,0.12); color: var(--teal-dark); }
+    .label-dark   { background: rgba(44,44,62,0.07); color: var(--text); }
+    .label-olive  { background: var(--olive-bg); color: var(--olive); }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.6rem);
+      font-weight: 900; line-height: 1.1; letter-spacing: -0.035em; color: var(--text);
+    }
+    .section-sub {
+      font-size: 1rem; line-height: 1.75; color: var(--text-muted); max-width: 600px; margin-top: 14px;
+    }
+    .c-pink  { color: var(--pink); }
+    .c-teal  { color: var(--teal-dark); }
+    .c-olive { color: var(--olive); }
+
+    /* ══════════════════════════
+       NAV
+    ══════════════════════════ */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--nav-h);
+      display: flex; align-items: center;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6);
+      transition: background var(--tr), box-shadow var(--tr);
+    }
+    #nav.scrolled {
+      background: rgba(255,255,255,0.55);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      box-shadow: 0 1px 0 rgba(180,80,160,0.1);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .logo-link { display: flex; align-items: center; text-decoration: none; }
+    .logo-svg { height: 28px; width: auto; }
+
+    .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 600; color: var(--text);
+      text-decoration: none; opacity: 0.65; transition: opacity var(--tr);
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    .ham {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; border: none; background: none; padding: 6px;
+    }
+    .ham span {
+      display: block; width: 22px; height: 2px; border-radius: 2px;
+      background: var(--text); transition: transform var(--tr), opacity var(--tr);
+    }
+    .ham.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .ham.open span:nth-child(2) { opacity: 0; }
+    .ham.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-drawer {
+      display: none; position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--white); box-shadow: var(--shadow);
+      padding: 20px 20px 28px;
+      flex-direction: column; gap: 4px; z-index: 999;
+    }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer a {
+      text-decoration: none; font-size: 0.95rem; font-weight: 600; color: var(--text);
+      padding: 11px 14px; border-radius: var(--radius-sm);
+      transition: background var(--tr);
+    }
+    .nav-drawer a:hover { background: var(--pink-bg); color: var(--pink); }
+    .nav-drawer .btn { margin-top: 8px; }
+
+    @media (max-width: 860px) {
+      .nav-links, #nav-cta { display: none; }
+      .ham { display: flex; }
+    }
+
+    /* ══════════════════════════
+       PROJECT HERO
+    ══════════════════════════ */
+    #project-hero {
+      padding: calc(var(--nav-h) + 80px) 0 96px;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(107,124,62,0.06) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 60% at 90% 80%, rgba(249,196,234,0.08) 0%, transparent 55%),
+        var(--white);
+    }
+    .hero-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; margin-bottom: 40px;
+      transition: color var(--tr);
+    }
+    .hero-back:hover { color: var(--pink); }
+    .hero-back svg { transition: transform var(--tr); }
+    .hero-back:hover svg { transform: translateX(-3px); }
+
+    .project-hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .project-hero-text {}
+    .project-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+    }
+    .project-tag {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 5px 13px; border-radius: var(--radius-pill);
+      background: var(--olive-bg); color: var(--olive);
+    }
+    .project-tag.t-pink { background: var(--pink-bg); color: var(--pink); }
+    .project-tag.t-teal { background: rgba(131,171,171,0.12); color: var(--teal-dark); }
+    .project-hero-title {
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 900; letter-spacing: -0.045em; line-height: 1.1; white-space: nowrap; color: var(--text);
+      margin-bottom: 24px;
+    }
+    .project-hero-sub {
+      font-size: 1rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 36px;
+    }
+    .project-hero-meta {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+    .meta-item {}
+    .meta-item span {
+      display: block; font-size: 0.65rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 4px;
+    }
+    .meta-item strong {
+      font-size: 0.88rem; font-weight: 700; color: var(--text);
+    }
+
+    .project-hero-visual {
+      position: relative;
+      padding-bottom: 32px;
+    }
+    .hero-img-wrap {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 28px 72px rgba(44,44,62,0.22), 0 4px 16px rgba(44,44,62,0.08);
+      aspect-ratio: 4 / 3;
+    }
+    .hero-screen {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+    }
+    /* Légère vignette sur l'image */
+    .hero-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 55%, rgba(30,36,20,0.28) 100%);
+      pointer-events: none;
+    }
+    /* Tag localisation en haut à droite */
+    .hero-location-tag {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      font-size: 0.72rem; font-weight: 700; color: var(--olive);
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+      z-index: 2;
+    }
+    /* Badge en bas à gauche, hors de l'image */
+    .hero-screen-badge {
+      position: absolute; bottom: 0; left: 0;
+      background: var(--white); border-radius: var(--radius);
+      padding: 14px 18px; box-shadow: var(--shadow-lg);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      z-index: 3;
+    }
+    .hsb-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--olive);
+      box-shadow: 0 0 0 3px rgba(107,124,62,0.2);
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+    .hsb-text { font-size: 0.75rem; font-weight: 700; color: var(--text); }
+    .hsb-text span { display: block; font-size: 0.65rem; font-weight: 500; color: var(--text-muted); }
+
+    @media (max-width: 900px) {
+      .project-hero-inner { grid-template-columns: 1fr; gap: 44px; }
+      .project-hero-title { font-size: 2.6rem; }
+      .project-hero-visual { padding-bottom: 28px; }
+    }
+
+    /* ══════════════════════════
+       INTRO SECTION
+    ══════════════════════════ */
+    #intro {
+      padding: 96px 0;
+      background: var(--olive-bg);
+      border-top: 1px solid var(--olive-border);
+      border-bottom: 1px solid var(--olive-border);
+    }
+    .intro-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .intro-left h2 {
+      font-size: clamp(1.8rem, 2.8vw, 2.4rem);
+      font-weight: 900; letter-spacing: -0.035em; line-height: 1.1;
+      margin-bottom: 20px; color: var(--text);
+    }
+    @media (min-width: 768px) {
+      .h2-break { display: block; }
+    }
+    @media (max-width: 767px) {
+      .h2-break { display: inline; }
+    }
+    .intro-left p {
+      font-size: 0.95rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 16px;
+    }
+    .intro-right {
+      display: flex; flex-direction: column; gap: 16px; padding-top: 8px;
+    }
+    .intro-stat {
+      background: var(--white); border-radius: var(--radius);
+      padding: 22px 26px;
+      border: 1.5px solid var(--olive-border);
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .intro-stat-icon {
+      width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .ic-olive { background: var(--olive-bg); }
+    .ic-pink  { background: var(--pink-bg); }
+    .ic-teal  { background: rgba(131,171,171,0.12); }
+    .intro-stat-text strong {
+      display: block; font-size: 0.88rem; font-weight: 800; color: var(--text); margin-bottom: 3px;
+    }
+    .intro-stat-text p {
+      font-size: 0.8rem; line-height: 1.55; color: var(--text-muted); margin: 0;
+    }
+    @media (max-width: 860px) {
+      .intro-inner { grid-template-columns: 1fr; gap: 44px; }
+    }
+
+    /* ══════════════════════════
+       PAGES SECTIONS (alternées)
+    ══════════════════════════ */
+    .page-section {
+      padding: 104px 0;
+    }
+    .page-section.bg-gray { background: var(--gray-bg); }
+    .page-section.bg-white { background: var(--white); }
+
+    .page-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 72px; align-items: center;
+    }
+    .page-inner.reverse { direction: rtl; }
+    .page-inner.reverse > * { direction: ltr; }
+
+    .page-text {}
+    .page-text h2 {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 900; letter-spacing: -0.035em; line-height: 1.1;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .page-text p {
+      font-size: 0.95rem; line-height: 1.8; color: var(--text-muted); margin-bottom: 14px;
+    }
+    .page-bullets {
+      list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 20px;
+    }
+    .page-bullets li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.85rem; color: var(--text); line-height: 1.5;
+    }
+    .bullet-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      margin-top: 5px; flex-shrink: 0;
+    }
+    .bd-olive  { background: var(--olive); }
+    .bd-pink   { background: var(--pink); }
+    .bd-teal   { background: var(--teal); }
+
+    .page-visual {
+      position: relative;
+    }
+    .page-screen {
+      width: 100%; border-radius: var(--radius-lg);
+      box-shadow: 0 20px 56px rgba(44,44,62,0.15), 0 3px 12px rgba(44,44,62,0.06);
+      display: block;
+    }
+    .page-screen-sm {
+      width: 62%; border-radius: var(--radius);
+      box-shadow: 0 16px 40px rgba(44,44,62,0.20);
+      display: block;
+      position: absolute; bottom: -28px; right: -20px;
+      border: 4px solid var(--white);
+    }
+
+    @media (max-width: 900px) {
+      .page-inner { grid-template-columns: 1fr; gap: 44px; }
+      .page-inner.reverse { direction: ltr; }
+      .page-screen-sm { width: 55%; bottom: -20px; right: -12px; }
+    }
+    @media (max-width: 600px) {
+      .page-section { padding: 72px 0; }
+      .page-screen-sm { display: none; }
+    }
+
+    /* ══════════════════════════
+       FEATURES GRID
+    ══════════════════════════ */
+    #features {
+      padding: 104px 0;
+      background: var(--dark);
+    }
+    #features .section-title { color: var(--white); }
+    #features .section-sub { color: rgba(255,255,255,0.5); }
+    #features .label-olive { background: rgba(107,124,62,0.25); color: #a8c06a; }
+
+    .feat-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 24px; margin-top: 56px;
+    }
+    .feat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 0;
+      overflow: hidden;
+      transition: border-color var(--tr), transform var(--tr);
+    }
+    .feat-card:hover { border-color: rgba(107,124,62,0.4); transform: translateY(-4px); }
+    .feat-card-screen {
+      width: 100%; display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      max-height: 280px; object-fit: cover; object-position: top;
+    }
+    .feat-card-body { padding: 28px 30px 32px; }
+    .feat-card-icon {
+      width: 44px; height: 44px; border-radius: 14px;
+      background: rgba(107,124,62,0.18);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; margin-bottom: 14px;
+    }
+    .feat-card h3 {
+      font-size: 1.05rem; font-weight: 800; color: var(--white);
+      letter-spacing: -0.02em; margin-bottom: 8px;
+    }
+    .feat-card p {
+      font-size: 0.84rem; line-height: 1.65; color: rgba(255,255,255,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .feat-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════
+       FOOTER
+    ══════════════════════════ */
+    footer {
+      background: var(--dark);
+      padding: 44px 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .foot-inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+    .foot-nav { display: flex; gap: 24px; list-style: none; flex-wrap: wrap; }
+    .foot-nav a { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,.45); text-decoration: none; transition: color var(--tr); }
+    .foot-nav a:hover { color: rgba(255,255,255,.9); }
+    .foot-copy { font-size: 0.75rem; color: rgba(255,255,255,.22); }
+    .logo-svg-foot { height: 22px; width: auto; }
+    @media (max-width: 660px) { .foot-inner { flex-direction: column; align-items: flex-start; gap: 18px; } }
+
+    /* ══════════════════════════
+       SCROLL TOP
+    ══════════════════════════ */
+    #totop {
+      position: fixed; bottom: 28px; right: 28px; z-index: 500;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--pink); color: var(--white);
+      border: none; cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(243,109,212,.35);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity var(--tr), transform var(--tr);
+    }
+    #totop.show { opacity: 1; transform: none; }
+    #totop:hover { filter: brightness(1.1); }
+
+    /* ══════════════════════════
+       FLOATING CONTACT WIDGET
+    ══════════════════════════ */
+    #contact-bubble {
+      position: fixed; bottom: 28px; right: 86px; z-index: 950;
+      height: 48px; padding: 0 20px 0 14px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--pink-mid) 0%, var(--pink) 100%);
+      border: none; cursor: pointer;
+      box-shadow: 0 8px 28px rgba(243,109,212,0.40);
+      display: flex; align-items: center; gap: 9px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      white-space: nowrap;
+    }
+    #contact-bubble:hover { transform: translateY(-2px); box-shadow: 0 12px 38px rgba(243,109,212,0.52); }
+    #contact-bubble .cb-label {
+      font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700;
+      color: white; letter-spacing: 0.02em;
+      transition: opacity 0.22s ease, max-width 0.3s ease; max-width: 120px; overflow: hidden;
+    }
+    #contact-bubble .cb-icon-chat,
+    #contact-bubble .cb-icon-close { flex-shrink: 0; transition: opacity 0.22s ease, transform 0.22s ease; }
+    #contact-bubble .cb-icon-close {
+      position: absolute; left: 50%; transform: translateX(-50%) rotate(-80deg) scale(0.7); opacity: 0;
+    }
+    #contact-bubble.open .cb-icon-chat  { opacity: 0; transform: rotate(80deg) scale(0.7); }
+    #contact-bubble.open .cb-icon-close { opacity: 1; transform: translateX(-50%) rotate(0deg) scale(1); }
+    #contact-bubble.open .cb-label      { opacity: 0; max-width: 0; padding: 0; }
+    .cb-dot {
+      position: absolute; top: 4px; right: 4px;
+      width: 13px; height: 13px; border-radius: 50%;
+      background: #4caf7d; border: 2px solid white;
+      animation: pulse-dot 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,125,0.5); }
+      60%       { box-shadow: 0 0 0 7px rgba(76,175,125,0); }
+    }
+    #contact-widget {
+      position: fixed; bottom: 92px; right: 86px; z-index: 950; width: 364px;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid rgba(243,109,212,0.13);
+      box-shadow: 0 24px 64px rgba(180,80,160,0.18), 0 4px 18px rgba(0,0,0,0.06);
+      overflow: hidden; transform-origin: bottom right;
+      transform: scale(0.88) translateY(10px); opacity: 0; pointer-events: none;
+      transition: transform 0.38s cubic-bezier(0.34,1.52,0.64,1), opacity 0.26s ease;
+    }
+    #contact-widget.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+    .cw-header {
+      padding: 22px 24px 16px;
+      background: linear-gradient(145deg, var(--pink-lightest) 0%, var(--pink-bg) 100%);
+      border-bottom: 1px solid rgba(243,109,212,0.10);
+    }
+    .cw-header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .cw-avatar {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      object-fit: cover; object-position: center top;
+      box-shadow: 0 4px 12px rgba(243,109,212,0.28); border: 2px solid rgba(243,109,212,0.20);
+    }
+    .cw-role { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+    .cw-status {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.67rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #3daa72; margin-bottom: 3px;
+    }
+    .cw-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf7d; }
+    .cw-title { font-size: 1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+    .cw-sub { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; margin-top: 1px; }
+    .cw-body { padding: 20px 24px 24px; }
+    .cw-field { margin-bottom: 12px; }
+    .cw-field label {
+      display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.05em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px;
+    }
+    .cw-field input, .cw-field textarea {
+      width: 100%; padding: 10px 13px;
+      background: var(--gray-bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'Nunito Sans', sans-serif; font-size: 0.875rem; color: var(--text);
+      outline: none; resize: none; box-sizing: border-box;
+      transition: border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+    .cw-field input:focus, .cw-field textarea:focus {
+      border-color: var(--pink); box-shadow: 0 0 0 3px rgba(243,109,212,0.10);
+    }
+    .cw-field textarea { height: 90px; }
+    .cw-submit {
+      width: 100%; padding: 12px 16px; margin-top: 4px;
+      background: linear-gradient(135deg, var(--pink-mid) 0%, var(--pink) 100%);
+      color: white; border: none; border-radius: var(--radius-pill);
+      font-family: 'Montserrat', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(243,109,212,0.30);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .cw-submit:hover { transform: translateY(-2px); box-shadow: 0 7px 24px rgba(243,109,212,0.42); }
+    .cw-success { display: none; padding: 36px 24px; text-align: center; }
+    .cw-success-icon {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: linear-gradient(135deg, #d8ecec, #a8cece);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; font-size: 1.5rem;
+    }
+    .cw-success h4 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 7px; }
+    .cw-success p  { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; }
+    @media (max-width: 440px) {
+      #contact-widget { width: calc(100vw - 32px); right: 16px; bottom: 88px; }
+      #contact-bubble { right: 16px; bottom: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="./nobase_index - Copie.html" class="logo-link" aria-label="Nobase, retour à l'accueil">
+        <svg class="logo-svg" viewBox="0 0 595.28 162.01" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path fill="#fedc5a" d="M567.64,137.63c0-2.9,2.35-5.26,5.25-5.26h11.78c2.9,0,5.25,2.35,5.25,5.26v11.77c0,2.9-2.35,5.26-5.25,5.26h-11.78c-2.91,0-5.25-2.35-5.25-5.26V137.63z"/>
+          <path fill="#f36dd4" d="M490.22,12.72c0-2.9,2.35-5.26,5.26-5.26h52.57c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-29.44c-2.9,0-5.26,2.35-5.26,5.26v28.39c0,2.9,2.36,5.26,5.26,5.26h21.24c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-21.24c-2.9,0-5.26,2.35-5.26,5.26v34.7c0,2.9,2.36,5.26,5.26,5.26h29.44c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-52.57c-2.9,0-5.26-2.35-5.26-5.26V12.72z"/>
+          <path fill="#f36dd4" d="M442.05,156.76c-11.22,0-19.7-3.15-25.44-9.46c-5.75-6.45-8.62-15.63-8.62-27.55v-3.15c0-2.9,2.35-5.26,5.26-5.26h11.35c2.9,0,5.26,2.35,5.26,5.26v4.84c0,9.53,4,14.3,11.99,14.3c3.93,0,6.87-1.12,8.83-3.36c2.1-2.38,3.15-6.17,3.15-11.35c0-6.17-1.4-11.57-4.2-16.19c-2.8-4.77-7.99-10.44-15.56-17.03c-9.53-8.41-16.19-15.98-19.98-22.71c-3.79-6.87-5.68-14.58-5.68-23.13c0-11.64,2.94-20.61,8.83-26.92c5.89-6.45,14.44-9.67,25.65-9.67c11.22,0,19.41,3.22,25.02,9.67c5.75,6.31,8.62,15.42,8.62,27.34v0.84c0,2.9-2.35,5.26-5.26,5.26h-11.35c-2.9,0-5.26-2.35-5.26-5.26V40.9c0-5.05-0.98-8.69-2.94-10.93c-1.96-2.38-4.84-3.58-8.62-3.58c-7.71,0-11.57,4.7-11.57,14.09c0,5.33,1.4,10.3,4.2,14.93c2.94,4.63,8.2,10.23,15.77,16.82c9.67,8.41,16.33,16.05,19.98,22.92c3.64,6.87,5.47,14.93,5.47,24.18c0,12.06-3.01,21.31-9.04,27.76C462.02,153.54,453.4,156.76,442.05,156.76z"/>
+          <path fill="#f36dd4" d="M345.35,11.87c0.41-2.54,2.61-4.41,5.19-4.41h22.39c2.58,0,4.78,1.87,5.19,4.41l22.26,136.68c0.52,3.2-1.95,6.1-5.19,6.1h-15.22c-0.99,0-1.83-0.73-1.97-1.71l-3.9-27.13c-0.01-0.03-0.06-0.03-0.06,0.01c0,0.02-0.01,0.03-0.03,0.03H352.3c-2.61,0-4.83,1.91-5.2,4.5l-2.89,19.81c-0.38,2.58-2.59,4.5-5.2,4.5h-10.72c-3.24,0-5.71-2.9-5.19-6.1L345.35,11.87z M365.25,105.87c3.2,0,5.65-2.83,5.21-5.99l-9.43-66.55c-0.02-0.12-0.12-0.21-0.24-0.21s-0.22,0.09-0.24,0.21l-9.23,66.57c-0.44,3.16,2.02,5.98,5.21,5.98L365.25,105.87z"/>
+          <path fill="#f36dd4" d="M243.18,12.72c0-2.9,2.35-5.26,5.26-5.26h29.65c11.92,0,20.61,2.8,26.07,8.41c5.47,5.47,8.2,13.95,8.2,25.44v5.89c0,7.57-1.26,13.74-3.79,18.51c-2.35,4.71-6.01,8.12-10.96,10.23c-0.11,0.05-0.19,0.16-0.19,0.28c0,0.13,0.09,0.25,0.21,0.29c11.36,3.98,17.04,14.19,17.04,30.63v12.62c0,11.35-3.01,20.05-9.04,26.07c-5.89,5.89-14.58,8.83-26.07,8.83h-31.12c-2.9,0-5.26-2.35-5.26-5.26L243.18,12.72z M275.35,67.39c4.63,0,8.06-1.19,10.3-3.58c2.38-2.38,3.58-6.38,3.58-11.99v-8.2c0-5.33-0.98-9.18-2.94-11.57c-1.82-2.38-4.77-3.58-8.83-3.58h-5.89c-2.9,0-5.26,2.35-5.26,5.26v28.39c0,2.9,2.35,5.26,5.26,5.26H275.35z M279.56,133.63c4.07,0,7.08-1.05,9.04-3.15c1.96-2.24,2.94-6.03,2.94-11.35v-12.83c0-6.73-1.19-11.35-3.58-13.88c-2.24-2.66-6.03-4-11.35-4h-5.05c-2.9,0-5.26,2.35-5.26,5.26v34.7c0,2.9,2.35,5.26,5.26,5.26H279.56z"/>
+          <path fill="#83ABAB" stroke="#83ABAB" stroke-width="0.4" d="M224.39,23.47l-5.38-5.38c-2.67-2.67-6.99-2.67-9.66,0l-110.9,110.9c-2.67,2.67-2.67,6.99,0,9.66l5.38,5.38c2.67,2.67,6.99,2.67,9.66,0l110.9-110.9C227.05,30.47,227.05,26.14,224.39,23.47z"/>
+          <path fill="#f36dd4" d="M219.48,60.45l-15.01,15.01c-0.26,0.26-0.37,0.64-0.3,1.01c0.75,3.58,1.12,7.31,1.12,11.18c0,6.66-1.11,12.95-3.31,18.67c-2.19,5.7-5.36,10.73-9.42,14.94c-4.07,4.22-8.94,7.57-14.48,9.96c-5.54,2.39-11.71,3.6-18.34,3.6c-4.32,0-8.44-0.51-12.32-1.53c-0.38-0.1-0.78,0.01-1.06,0.28l-14.21,14.21c-0.55,0.55-0.37,1.49,0.36,1.79c0.13,0.05,0.26,0.11,0.4,0.16c8.1,3.27,17.13,4.93,26.84,4.93s18.72-1.66,26.77-4.93c8.05-3.27,15.12-7.95,21.02-13.91c5.89-5.95,10.51-13.1,13.74-21.27c3.21-8.14,4.84-17.19,4.84-26.9s-1.63-18.74-4.84-26.83C220.98,60.09,220.04,59.89,219.48,60.45z"/>
+          <path fill="#f36dd4" d="M117.54,74.31c0-6.66,1.14-12.94,3.39-18.66c2.24-5.71,5.42-10.74,9.43-14.96c4-4.21,8.84-7.52,14.37-9.86c5.54-2.34,11.72-3.53,18.36-3.53c4.32,0,8.45,0.5,12.33,1.5c0.39,0.1,0.8-0.01,1.09-0.29l14.12-14.12c0.57-0.57,0.38-1.53-0.37-1.84c-0.13-0.06-0.27-0.11-0.4-0.17c-8.05-3.27-17.05-4.93-26.77-4.93c-9.71,0-18.75,1.66-26.84,4.93c-8.11,3.28-15.19,7.96-21.04,13.92c-5.84,5.95-10.43,13.08-13.65,21.18c-3.21,8.08-4.84,17.11-4.84,26.83s1.63,18.77,4.84,26.9c0,0.01,0.01,0.01,0.01,0.02c0.3,0.75,1.27,0.95,1.85,0.38l14.99-14.99c0.27-0.27,0.39-0.67,0.3-1.04C117.93,81.98,117.54,78.21,117.54,74.31z"/>
+          <path fill="#f36dd4" d="M6.16,12.72c0-2.9,2.35-5.26,5.26-5.26H31.1c2.4,0,4.5,1.63,5.09,3.96l21.44,83.97c0.03,0.1,0.12,0.18,0.23,0.18c0.13,0,0.24-0.11,0.24-0.24V12.72c0-2.9,2.35-5.26,5.26-5.26h10.09c2.9,0,5.26,2.35,5.26,5.26V149.4c0,2.9-2.35,5.26-5.26,5.26H59.02c-2.4,0-4.49-1.62-5.09-3.94L27.24,47.38c-0.03-0.1-0.12-0.18-0.23-0.18c-0.13,0-0.24,0.11-0.24,0.24V149.4c0,2.9-2.35,5.26-5.26,5.26H11.42c-2.9,0-5.26-2.35-5.26-5.26V12.72z"/>
+        </svg>
+      </a>
+      <ul class="nav-links">
+        <li><a href="./nobase_index - Copie.html#portfolio">Nos réalisations</a></li>
+        <li><a href="./nobase_index - Copie.html#pricing">Nos offres</a></li>
+        <li><a href="./nobase_index - Copie.html#why-us">À propos</a></li>
+      </ul>
+      <a href="./nobase_index - Copie.html#contact" class="btn btn-teal" id="nav-cta">Nous contacter</a>
+      <button class="ham" id="ham" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-drawer" id="drawer">
+  <a href="./nobase_index - Copie.html#portfolio" class="drawer-link">Nos réalisations</a>
+  <a href="./nobase_index - Copie.html#pricing"   class="drawer-link">Nos offres</a>
+  <a href="./nobase_index - Copie.html#why-us"    class="drawer-link">À propos</a>
+  <a href="./nobase_index - Copie.html#contact" class="btn btn-teal">Nous contacter</a>
+</div>
+
+<!-- ══ PROJECT HERO ══ -->
+<section id="project-hero">
+  <div class="container">
+    <a href="./nobase_index - Copie.html#portfolio" class="hero-back rev">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Retour aux réalisations
+    </a>
+    <div class="project-hero-inner">
+      <div class="project-hero-text">
+        <div class="project-tags rev d1">
+          <span class="project-tag">Bubble.io</span>
+          <span class="project-tag t-teal">Web Responsive</span>
+          <span class="project-tag t-pink">Réservation en ligne</span>
+        </div>
+        <h1 class="project-hero-title rev d2">Chêne <span class="c-olive">d'Auge</span></h1>
+        <p class="project-hero-sub rev d3">Application web premium pour une maison d'hôte au cœur du Pays d'Auge, en Normandie. De la découverte des chambres à la confirmation de réservation, une expérience fluide, élégante et pensée pour convertir.</p>
+        <div class="project-hero-meta rev d4">
+          <div class="meta-item">
+            <span>Secteur</span>
+            <strong>Hôtellerie · Tourisme</strong>
+          </div>
+          <div class="meta-item">
+            <span>Plateforme</span>
+            <strong>Bubble.io</strong>
+          </div>
+          <div class="meta-item">
+            <span>Type</span>
+            <strong>Web App · Back-office</strong>
+          </div>
+        </div>
+      </div>
+      <div class="project-hero-visual rev d2">
+        <div class="hero-img-wrap">
+          <img class="hero-screen" src="../CHêne d'auge maquettes/gr_img_header.png" alt="Chêne d'Auge, Maison d'hôte en Normandie">
+          <div class="hero-location-tag">📍 Pays d'Auge, Normandie</div>
+        </div>
+        <div class="hero-screen-badge">
+          <div class="hsb-dot"></div>
+          <div class="hsb-text">Réservation en ligne
+            <span>Disponibilités en temps réel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INTRO ══ -->
+<section id="intro">
+  <div class="container">
+    <div class="intro-inner">
+      <div class="intro-left rev">
+        <div class="label label-olive">Le projet</div>
+        <h2>Une maison d'hôte premium,<span class="h2-break"> </span><span class="c-olive">numérisée de A à Z</span></h2>
+        <p>Chêne d'Auge est une application web dédiée à une maison d'hôte premium nichée au cœur du Pays d'Auge, en Normandie. Elle permet aux voyageurs de découvrir les chambres, explorer les expériences proposées, spa, table d'hôte, activités locales, et réserver leur séjour en quelques clics grâce à un système de disponibilité clair et intuitif.</p>
+        <p>Côté gestion, la plateforme intègre un back-office complet permettant d'administrer les chambres, gérer les calendriers, définir les tarifs, suivre les réservations et centraliser les demandes clients.</p>
+        <p>Un projet conçu avec une approche produit orientée conversion, performance et élégance, alliant expérience utilisateur fluide et architecture technique optimisée.</p>
+      </div>
+      <div class="intro-right">
+        <div class="intro-stat rev d1">
+          <div class="intro-stat-icon ic-olive">🏡</div>
+          <div class="intro-stat-text">
+            <strong>Expérience client de bout en bout</strong>
+            <p>Découverte, réservation et paiement dans un seul parcours fluide, sans friction.</p>
+          </div>
+        </div>
+        <div class="intro-stat rev d2">
+          <div class="intro-stat-icon ic-pink">⚙️</div>
+          <div class="intro-stat-text">
+            <strong>Back-office intégré</strong>
+            <p>Calendriers, tarifs, réservations et chiffre d'affaires pilotés depuis un tableau de bord unique.</p>
+          </div>
+        </div>
+        <div class="intro-stat rev d3">
+          <div class="intro-stat-icon ic-teal">🔒</div>
+          <div class="intro-stat-text">
+            <strong>Paiement sécurisé via Stripe</strong>
+            <p>Intégration native Stripe avec récapitulatif de commande avant confirmation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PAGE D'ACCUEIL ══ -->
+<section class="page-section bg-white">
+  <div class="container">
+    <div class="page-inner">
+      <div class="page-text rev">
+        <div class="label label-olive">01, Page d'accueil</div>
+        <h2>Toute l'expérience de la maison, <span class="c-olive">en une seule page</span></h2>
+        <p>La page d'accueil concentre l'ensemble de l'expérience de découverte de la maison d'hôte. Elle permet d'explorer les chambres, le spa et les expériences proposées, tout en offrant un accès immédiat aux disponibilités et à la réservation en ligne.</p>
+        <ul class="page-bullets">
+          <li><span class="bullet-dot bd-olive"></span>Présentation des chambres et suites avec visuels immersifs</li>
+          <li><span class="bullet-dot bd-olive"></span>Section spa, table d'hôte et activités locales</li>
+          <li><span class="bullet-dot bd-olive"></span>Accès direct aux disponibilités depuis le header</li>
+          <li><span class="bullet-dot bd-olive"></span>Navigation fluide et conversion optimisée</li>
+        </ul>
+      </div>
+      <div class="page-visual rev d2">
+        <img class="page-screen" src="../CHêne d'auge maquettes/index.png" alt="Page d'accueil Chêne d'Auge">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DÉTAIL CHAMBRE ══ -->
+<section class="page-section bg-gray">
+  <div class="container">
+    <div class="page-inner reverse">
+      <div class="page-text rev">
+        <div class="label label-teal">02, Détail de chambre</div>
+        <h2>Toutes les informations pour <span class="c-teal">décider et réserver</span></h2>
+        <p>La page de détail d'une chambre centralise l'ensemble des informations essentielles pour faciliter la décision et la réservation. Elle met en avant des visuels immersifs, la description complète, les équipements disponibles et les disponibilités en temps réel.</p>
+        <ul class="page-bullets">
+          <li><span class="bullet-dot bd-teal"></span>Galerie photo immersive plein écran</li>
+          <li><span class="bullet-dot bd-teal"></span>Description détaillée et liste des équipements</li>
+          <li><span class="bullet-dot bd-teal"></span>Sélection des dates directement sur la page</li>
+          <li><span class="bullet-dot bd-teal"></span>Appel à l'action de réservation bien visible</li>
+        </ul>
+      </div>
+      <div class="page-visual rev d2">
+        <img class="page-screen" src="../CHêne d'auge maquettes/chambre_detail.png" alt="Page détail chambre Chêne d'Auge">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ RÉSERVATION ══ -->
+<section class="page-section bg-white">
+  <div class="container">
+    <div class="page-inner">
+      <div class="page-text rev">
+        <div class="label label-pink">03, Réservation</div>
+        <h2>Un calendrier dynamique pour <span class="c-pink">réserver en autonomie</span></h2>
+        <p>La page Réservation permet de réserver une chambre en toute autonomie, avec un calendrier dynamique affichant les disponibilités en temps réel. Dates indisponibles masquées, calcul automatique du tarif selon la durée, récapitulatif clair avant confirmation.</p>
+        <ul class="page-bullets">
+          <li><span class="bullet-dot bd-pink"></span>Calendrier interactif avec disponibilités en temps réel</li>
+          <li><span class="bullet-dot bd-pink"></span>Calcul automatique du tarif selon la période et la durée</li>
+          <li><span class="bullet-dot bd-pink"></span>Récapitulatif de séjour avant validation</li>
+          <li><span class="bullet-dot bd-pink"></span>Rappel des équipements de la chambre choisie</li>
+        </ul>
+      </div>
+      <div class="page-visual rev d2">
+        <img class="page-screen" src="../CHêne d'auge maquettes/booking_page.png" alt="Page de réservation Chêne d'Auge">
+        <img class="page-screen-sm" src="../CHêne d'auge maquettes/booking_on-1.png" alt="Calendrier de réservation dynamique">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BACK-OFFICE ══ -->
+<section class="page-section bg-gray">
+  <div class="container">
+    <div class="page-inner reverse">
+      <div class="page-text rev">
+        <div class="label label-dark">04, Espace Administration</div>
+        <h2>Un tableau de bord pour <span class="c-olive">piloter l'activité</span></h2>
+        <p>L'Espace Administration centralise l'ensemble des outils de pilotage de la maison d'hôte. Il permet de suivre en temps réel les réservations, le taux d'occupation et le chiffre d'affaires, tout en facilitant la gestion quotidienne des arrivées, des tâches et du calendrier.</p>
+        <ul class="page-bullets">
+          <li><span class="bullet-dot bd-olive"></span>Tableau de bord avec KPIs en temps réel</li>
+          <li><span class="bullet-dot bd-olive"></span>Gestion des réservations et des arrivées du jour</li>
+          <li><span class="bullet-dot bd-olive"></span>Calendrier d'occupation par chambre</li>
+          <li><span class="bullet-dot bd-olive"></span>Suivi financier et rentabilité par période</li>
+        </ul>
+      </div>
+      <div class="page-visual rev d2">
+        <img class="page-screen" src="../CHêne d'auge maquettes/Backoffice.png" alt="Back-office Chêne d'Auge">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FONCTIONNALITÉS CLÉS ══ -->
+<section id="features">
+  <div class="container">
+    <div class="rev" style="text-align:center; max-width:640px; margin:0 auto 0;">
+      <div class="label label-olive">Fonctionnalités</div>
+      <h2 class="section-title">Ce qui fait la <span style="color:var(--pink)">différence</span></h2>
+      <p class="section-sub">La plateforme intègre un ensemble complet de fonctionnalités pour automatiser et sécuriser la gestion des réservations, de la disponibilité en temps réel au paiement Stripe, en passant par les notifications et le chat en direct.</p>
+    </div>
+    <div class="feat-grid">
+
+      <div class="feat-card rev d1">
+        <img class="feat-card-screen" src="../CHêne d'auge maquettes/booking_on-1.png" alt="Calendrier dynamique">
+        <div class="feat-card-body">
+          <div class="feat-card-icon">📅</div>
+          <h3>Calendrier dynamique</h3>
+          <p>Disponibilités affichées en temps réel avec tarification par nuit. Le voyageur sélectionne ses dates, le total se calcule automatiquement. Les jours indisponibles sont clairement identifiés.</p>
+        </div>
+      </div>
+
+      <div class="feat-card rev d2">
+        <img class="feat-card-screen" src="../CHêne d'auge maquettes/paiement.png" alt="Paiement Stripe" style="object-position: 50% 10%;">
+        <div class="feat-card-body">
+          <div class="feat-card-icon">💳</div>
+          <h3>Paiement sécurisé via Stripe</h3>
+          <p>Intégration native Stripe, carte bancaire, SEPA et Klarna. Page de paiement branded Chêne d'Auge avec récapitulatif du séjour, données cryptées et confirmation instantanée.</p>
+        </div>
+      </div>
+
+      <div class="feat-card rev d3">
+        <img class="feat-card-screen" src="../CHêne d'auge maquettes/booking_on-2.png" alt="Notifications">
+        <div class="feat-card-body">
+          <div class="feat-card-icon">🔔</div>
+          <h3>Notifications automatisées</h3>
+          <p>À chaque nouvelle réservation, l'administrateur reçoit une notification push avec les détails complets du séjour. Le client reçoit simultanément sa confirmation par e-mail.</p>
+        </div>
+      </div>
+
+      <div class="feat-card rev d4">
+        <img class="feat-card-screen" src="../CHêne d'auge maquettes/booking_on.png" alt="Chat en direct">
+        <div class="feat-card-body">
+          <div class="feat-card-icon">💬</div>
+          <h3>Module de discussion en direct</h3>
+          <p>Un chat intégré permet aux visiteurs de contacter directement le concierge, vérification de disponibilité, questions sur les tarifs, demandes spéciales. Fluidifie les échanges et améliore la conversion.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="foot-inner">
+      <a href="./nobase_index - Copie.html" class="logo-link" aria-label="Nobase">
+        <svg class="logo-svg-foot" viewBox="0 0 595.28 162.01" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path fill="#fedc5a" d="M567.64,137.63c0-2.9,2.35-5.26,5.25-5.26h11.78c2.9,0,5.25,2.35,5.25,5.26v11.77c0,2.9-2.35,5.26-5.25,5.26h-11.78c-2.91,0-5.25-2.35-5.25-5.26V137.63z"/>
+          <path fill="#f36dd4" d="M490.22,12.72c0-2.9,2.35-5.26,5.26-5.26h52.57c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-29.44c-2.9,0-5.26,2.35-5.26,5.26v28.39c0,2.9,2.36,5.26,5.26,5.26h21.24c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-21.24c-2.9,0-5.26,2.35-5.26,5.26v34.7c0,2.9,2.36,5.26,5.26,5.26h29.44c2.9,0,5.26,2.35,5.26,5.26v10.51c0,2.9-2.36,5.26-5.26,5.26h-52.57c-2.9,0-5.26-2.35-5.26-5.26V12.72z"/>
+          <path fill="#f36dd4" d="M442.05,156.76c-11.22,0-19.7-3.15-25.44-9.46c-5.75-6.45-8.62-15.63-8.62-27.55v-3.15c0-2.9,2.35-5.26,5.26-5.26h11.35c2.9,0,5.26,2.35,5.26,5.26v4.84c0,9.53,4,14.3,11.99,14.3c3.93,0,6.87-1.12,8.83-3.36c2.1-2.38,3.15-6.17,3.15-11.35c0-6.17-1.4-11.57-4.2-16.19c-2.8-4.77-7.99-10.44-15.56-17.03c-9.53-8.41-16.19-15.98-19.98-22.71c-3.79-6.87-5.68-14.58-5.68-23.13c0-11.64,2.94-20.61,8.83-26.92c5.89-6.45,14.44-9.67,25.65-9.67c11.22,0,19.41,3.22,25.02,9.67c5.75,6.31,8.62,15.42,8.62,27.34v0.84c0,2.9-2.35,5.26-5.26,5.26h-11.35c-2.9,0-5.26-2.35-5.26-5.26V40.9c0-5.05-0.98-8.69-2.94-10.93c-1.96-2.38-4.84-3.58-8.62-3.58c-7.71,0-11.57,4.7-11.57,14.09c0,5.33,1.4,10.3,4.2,14.93c2.94,4.63,8.2,10.23,15.77,16.82c9.67,8.41,16.33,16.05,19.98,22.92c3.64,6.87,5.47,14.93,5.47,24.18c0,12.06-3.01,21.31-9.04,27.76C462.02,153.54,453.4,156.76,442.05,156.76z"/>
+          <path fill="#f36dd4" d="M345.35,11.87c0.41-2.54,2.61-4.41,5.19-4.41h22.39c2.58,0,4.78,1.87,5.19,4.41l22.26,136.68c0.52,3.2-1.95,6.1-5.19,6.1h-15.22c-0.99,0-1.83-0.73-1.97-1.71l-3.9-27.13c-0.01-0.03-0.06-0.03-0.06,0.01c0,0.02-0.01,0.03-0.03,0.03H352.3c-2.61,0-4.83,1.91-5.2,4.5l-2.89,19.81c-0.38,2.58-2.59,4.5-5.2,4.5h-10.72c-3.24,0-5.71-2.9-5.19-6.1L345.35,11.87z M365.25,105.87c3.2,0,5.65-2.83,5.21-5.99l-9.43-66.55c-0.02-0.12-0.12-0.21-0.24-0.21s-0.22,0.09-0.24,0.21l-9.23,66.57c-0.44,3.16,2.02,5.98,5.21,5.98L365.25,105.87z"/>
+          <path fill="#f36dd4" d="M243.18,12.72c0-2.9,2.35-5.26,5.26-5.26h29.65c11.92,0,20.61,2.8,26.07,8.41c5.47,5.47,8.2,13.95,8.2,25.44v5.89c0,7.57-1.26,13.74-3.79,18.51c-2.35,4.71-6.01,8.12-10.96,10.23c-0.11,0.05-0.19,0.16-0.19,0.28c0,0.13,0.09,0.25,0.21,0.29c11.36,3.98,17.04,14.19,17.04,30.63v12.62c0,11.35-3.01,20.05-9.04,26.07c-5.89,5.89-14.58,8.83-26.07,8.83h-31.12c-2.9,0-5.26-2.35-5.26-5.26L243.18,12.72z M275.35,67.39c4.63,0,8.06-1.19,10.3-3.58c2.38-2.38,3.58-6.38,3.58-11.99v-8.2c0-5.33-0.98-9.18-2.94-11.57c-1.82-2.38-4.77-3.58-8.83-3.58h-5.89c-2.9,0-5.26,2.35-5.26,5.26v28.39c0,2.9,2.35,5.26,5.26,5.26H275.35z M279.56,133.63c4.07,0,7.08-1.05,9.04-3.15c1.96-2.24,2.94-6.03,2.94-11.35v-12.83c0-6.73-1.19-11.35-3.58-13.88c-2.24-2.66-6.03-4-11.35-4h-5.05c-2.9,0-5.26,2.35-5.26,5.26v34.7c0,2.9,2.35,5.26,5.26,5.26H279.56z"/>
+          <path fill="#83ABAB" stroke="#83ABAB" stroke-width="0.4" d="M224.39,23.47l-5.38-5.38c-2.67-2.67-6.99-2.67-9.66,0l-110.9,110.9c-2.67,2.67-2.67,6.99,0,9.66l5.38,5.38c2.67,2.67,6.99,2.67,9.66,0l110.9-110.9C227.05,30.47,227.05,26.14,224.39,23.47z"/>
+          <path fill="#f36dd4" d="M219.48,60.45l-15.01,15.01c-0.26,0.26-0.37,0.64-0.3,1.01c0.75,3.58,1.12,7.31,1.12,11.18c0,6.66-1.11,12.95-3.31,18.67c-2.19,5.7-5.36,10.73-9.42,14.94c-4.07,4.22-8.94,7.57-14.48,9.96c-5.54,2.39-11.71,3.6-18.34,3.6c-4.32,0-8.44-0.51-12.32-1.53c-0.38-0.1-0.78,0.01-1.06,0.28l-14.21,14.21c-0.55,0.55-0.37,1.49,0.36,1.79c0.13,0.05,0.26,0.11,0.4,0.16c8.1,3.27,17.13,4.93,26.84,4.93s18.72-1.66,26.77-4.93c8.05-3.27,15.12-7.95,21.02-13.91c5.89-5.95,10.51-13.1,13.74-21.27c3.21-8.14,4.84-17.19,4.84-26.9s-1.63-18.74-4.84-26.83C220.98,60.09,220.04,59.89,219.48,60.45z"/>
+          <path fill="#f36dd4" d="M117.54,74.31c0-6.66,1.14-12.94,3.39-18.66c2.24-5.71,5.42-10.74,9.43-14.96c4-4.21,8.84-7.52,14.37-9.86c5.54-2.34,11.72-3.53,18.36-3.53c4.32,0,8.45,0.5,12.33,1.5c0.39,0.1,0.8-0.01,1.09-0.29l14.12-14.12c0.57-0.57,0.38-1.53-0.37-1.84c-0.13-0.06-0.27-0.11-0.4-0.17c-8.05-3.27-17.05-4.93-26.77-4.93c-9.71,0-18.75,1.66-26.84,4.93c-8.11,3.28-15.19,7.96-21.04,13.92c-5.84,5.95-10.43,13.08-13.65,21.18c-3.21,8.08-4.84,17.11-4.84,26.83s1.63,18.77,4.84,26.9c0,0.01,0.01,0.01,0.01,0.02c0.3,0.75,1.27,0.95,1.85,0.38l14.99-14.99c0.27-0.27,0.39-0.67,0.3-1.04C117.93,81.98,117.54,78.21,117.54,74.31z"/>
+          <path fill="#f36dd4" d="M6.16,12.72c0-2.9,2.35-5.26,5.26-5.26H31.1c2.4,0,4.5,1.63,5.09,3.96l21.44,83.97c0.03,0.1,0.12,0.18,0.23,0.18c0.13,0,0.24-0.11,0.24-0.24V12.72c0-2.9,2.35-5.26,5.26-5.26h10.09c2.9,0,5.26,2.35,5.26,5.26V149.4c0,2.9-2.35,5.26-5.26,5.26H59.02c-2.4,0-4.49-1.62-5.09-3.94L27.24,47.38c-0.03-0.1-0.12-0.18-0.23-0.18c-0.13,0-0.24,0.11-0.24,0.24V149.4c0,2.9-2.35,5.26-5.26,5.26H11.42c-2.9,0-5.26-2.35-5.26-5.26V12.72z"/>
+        </svg>
+      </a>
+      <nav>
+        <ul class="foot-nav">
+          <li><a href="./nobase_index - Copie.html">Accueil</a></li>
+          <li><a href="./nobase_index - Copie.html#portfolio">Nos réalisations</a></li>
+          <li><a href="./nobase_index - Copie.html#pricing">Nos offres</a></li>
+          <li><a href="./nobase_index - Copie.html#why-us">À propos</a></li>
+        </ul>
+      </nav>
+      <a href="./nobase_index - Copie.html#contact" class="btn btn-teal" style="padding:9px 18px;font-size:.8rem">Nous contacter</a>
+      <div class="foot-copy">© 2025 Nobase. Tous droits réservés.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══ FLOATING CONTACT WIDGET ══ -->
+<button id="contact-bubble" aria-label="Ouvrir le contact" aria-expanded="false">
+  <span class="cb-dot"></span>
+  <span class="cb-icon-chat">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none">
+      <path d="M3 4.5C3 3.12 4.12 2 5.5 2h11C17.88 2 19 3.12 19 4.5v8C19 13.88 17.88 15 16.5 15H8l-4 4.5V4.5z" stroke="white" stroke-width="1.8" stroke-linejoin="round"/>
+      <line x1="7" y1="7" x2="15" y2="7" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="7" y1="10.5" x2="12" y2="10.5" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </span>
+  <span class="cb-label">Discutons !</span>
+  <span class="cb-icon-close">
+    <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
+      <path d="M1.5 1.5l14 14M15.5 1.5l-14 14" stroke="white" stroke-width="2.1" stroke-linecap="round"/>
+    </svg>
+  </span>
+</button>
+
+<div id="contact-widget" role="dialog" aria-modal="false" aria-label="Formulaire de contact">
+  <div class="cw-header">
+    <div class="cw-header-top">
+      <img class="cw-avatar" src="../1x/Fichier 31.png" alt="Anthony">
+      <div>
+        <div class="cw-status"><span class="cw-status-dot"></span>En ligne</div>
+        <div class="cw-title">Anthony</div>
+        <div class="cw-role">Cofondateur</div>
+      </div>
+    </div>
+    <p class="cw-sub">Parlons de votre projet, réponse sous 24h.</p>
+  </div>
+  <div class="cw-body">
+    <form id="cw-form" novalidate>
+      <div class="cw-field">
+        <label for="cw-name">Votre nom</label>
+        <input type="text" id="cw-name" placeholder="Jean Dupont" autocomplete="name">
+      </div>
+      <div class="cw-field">
+        <label for="cw-email">Adresse e-mail</label>
+        <input type="email" id="cw-email" placeholder="jean@exemple.com" autocomplete="email">
+      </div>
+      <div class="cw-field">
+        <label for="cw-msg">Votre message</label>
+        <textarea id="cw-msg" placeholder="Décrivez brièvement votre projet…"></textarea>
+      </div>
+      <button type="submit" class="cw-submit">Envoyer le message &rarr;</button>
+    </form>
+    <div class="cw-success" id="cw-success">
+      <div class="cw-success-icon">✓</div>
+      <h4>Message bien reçu !</h4>
+      <p>Merci pour votre message.<br>Nous reviendrons vers vous très prochainement.</p>
+    </div>
+  </div>
+</div>
+
+<button id="totop" aria-label="Retour en haut">↑</button>
+
+<script>
+  // ── NAV scroll ──
+  const nav = document.getElementById('nav');
+  const totop = document.getElementById('totop');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 24);
+    totop.classList.toggle('show', window.scrollY > 440);
+  }, { passive: true });
+
+  // ── Hamburger ──
+  const ham = document.getElementById('ham');
+  const drawer = document.getElementById('drawer');
+  ham.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    ham.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', open);
+  });
+  document.querySelectorAll('.drawer-link, .nav-drawer .btn').forEach(el => {
+    el.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      ham.classList.remove('open');
+      ham.setAttribute('aria-expanded', false);
+    });
+  });
+
+  // ── Scroll reveal ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+  document.querySelectorAll('.rev').forEach(el => obs.observe(el));
+
+  // ── Scroll to top ──
+  totop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // ── Floating contact widget ──
+  const bubble = document.getElementById('contact-bubble');
+  const widget = document.getElementById('contact-widget');
+  const cwForm = document.getElementById('cw-form');
+  const cwSucc = document.getElementById('cw-success');
+
+  bubble.addEventListener('click', () => {
+    const open = widget.classList.toggle('open');
+    bubble.classList.toggle('open', open);
+    bubble.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', e => {
+    if (!widget.contains(e.target) && !bubble.contains(e.target)) {
+      widget.classList.remove('open');
+      bubble.classList.remove('open');
+      bubble.setAttribute('aria-expanded', false);
+    }
+  });
+  cwForm.addEventListener('submit', e => {
+    e.preventDefault();
+    cwForm.style.display = 'none';
+    cwSucc.style.display = 'block';
+  });
+</script>
+</body>
+</html>
