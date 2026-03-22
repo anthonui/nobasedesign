@@ -300,15 +300,16 @@
     }
     .hero-title {
       font-size: clamp(1.7rem, 3.8vw, 3rem);
-      font-weight: 800; line-height: 1.15;
+      font-weight: 800; line-height: 1.3;
       letter-spacing: -0.04em; color: var(--text);
       text-transform: uppercase; max-width: 900px; margin: 0 auto 24px;
       display: flex; flex-direction: column; align-items: center;
     }
     .pill {
-      display: inline-block; padding: 4px 16px;
+      display: inline; padding: 4px 16px;
       border-radius: var(--radius-pill);
-      font-size: inherit; font-weight: 700; line-height: inherit; vertical-align: baseline;
+      font-size: inherit; font-weight: 700; line-height: inherit;
+      -webkit-box-decoration-break: clone; box-decoration-break: clone;
     }
     .pill-pink {
       background: linear-gradient(135deg, #9dc4c4 0%, var(--teal) 50%, var(--teal-dark) 100%);
@@ -392,7 +393,7 @@
     .mobile-only { display: none; }
     @media (max-width: 860px) { .mobile-only { display: inline; } .mobile-nowrap { white-space: nowrap; } }
     @media (max-width: 680px) {
-      .hero-title { font-size: 1.7rem; }
+      .hero-title { font-size: 1.7rem; line-height: 1.6; }
       .hero-title-line { white-space: normal; display: inline; }
       .hero-sub span { white-space: normal; }
     }
