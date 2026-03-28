@@ -369,7 +369,8 @@
       padding: 16px;
       flex-direction: column; gap: 4px; z-index: 999;
     }
-    .nav-drawer.open { display: flex; }
+    .nav-drawer.open { display: flex; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease; }
+    .nav-drawer.open.scroll-hidden { transform: translateX(-50%) translateY(-200%); opacity: 0; pointer-events: none; }
     .nav-drawer a {
       text-decoration: none; font-size: 0.95rem; font-weight: 600; color: var(--text);
       padding: 11px 14px; border-radius: var(--radius-sm);
@@ -1987,9 +1988,7 @@
           scrollDownAccum += currentY - lastScrollY;
           if (scrollDownAccum >= 30) {
             nav.classList.add('nav-hidden');
-            drawer.classList.remove('open');
-            ham.classList.remove('open');
-            ham.setAttribute('aria-expanded', false);
+            drawer.classList.add('scroll-hidden');
           }
         } else {
           nav.classList.add('nav-hidden');
@@ -1997,6 +1996,12 @@
       } else if (currentY < lastScrollY) {
         scrollDownAccum = 0;
         nav.classList.remove('nav-hidden');
+        if (isMobile && drawer.classList.contains('scroll-hidden')) {
+          drawer.classList.remove('scroll-hidden');
+          drawer.classList.remove('open');
+          ham.classList.remove('open');
+          ham.setAttribute('aria-expanded', false);
+        }
       }
       lastScrollY = currentY;
 
@@ -2005,8 +2010,8 @@
       scrollStopTimer = setTimeout(() => {
         scrollDownAccum = 0;
         nav.classList.remove('nav-hidden');
-        // Ferme le drawer quand la nav revient
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 768 && drawer.classList.contains('scroll-hidden')) {
+          drawer.classList.remove('scroll-hidden');
           drawer.classList.remove('open');
           ham.classList.remove('open');
           ham.setAttribute('aria-expanded', false);
