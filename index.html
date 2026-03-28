@@ -1060,11 +1060,11 @@
       box-shadow: 0 12px 38px rgba(243,109,212,0.52);
     }
     @keyframes contact-nudge {
-      0%,100% { transform: translateX(0); }
-      20%     { transform: translateX(-5px); }
-      40%     { transform: translateX(5px); }
-      60%     { transform: translateX(-3px); }
-      80%     { transform: translateX(3px); }
+      0%,100% { transform: translateX(0);    filter: brightness(1);    box-shadow: 0 8px 28px rgba(243,109,212,0.40); }
+      20%     { transform: translateX(-5px); filter: brightness(1.35); box-shadow: 0 0 0 5px rgba(255,255,255,0.35), 0 8px 36px rgba(243,109,212,0.65); }
+      40%     { transform: translateX(5px);  filter: brightness(1.45); box-shadow: 0 0 0 7px rgba(255,255,255,0.25), 0 8px 40px rgba(243,109,212,0.70); }
+      60%     { transform: translateX(-3px); filter: brightness(1.2);  box-shadow: 0 0 0 3px rgba(255,255,255,0.15), 0 8px 32px rgba(243,109,212,0.55); }
+      80%     { transform: translateX(3px);  filter: brightness(1.1);  box-shadow: 0 8px 30px rgba(243,109,212,0.45); }
     }
     #contact-bubble.nudge { animation: contact-nudge 0.55s ease-in-out; }
     #contact-bubble .cb-label {
