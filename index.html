@@ -451,7 +451,7 @@
       will-change: transform;
     }
     .hero-title {
-      font-size: clamp(1.7rem, 3.8vw, 3rem);
+      font-size: clamp(1.55rem, 1.8vw + 0.8rem, 2.6rem);
       font-weight: 800; line-height: 1.3;
       letter-spacing: -0.04em; color: var(--text);
       text-transform: uppercase; max-width: 900px; margin: 0 auto 24px;
@@ -542,7 +542,7 @@
     .mobile-only { display: none; }
     @media (max-width: 860px) { .mobile-only { display: inline; } .mobile-nowrap { white-space: nowrap; } }
     @media (max-width: 680px) {
-      .hero-title { font-size: 1.7rem; line-height: 1.45; }
+      .hero-title { line-height: 1.45; }
       .hero-title-line { white-space: normal; display: inline; }
       .hero-sub span { white-space: normal; }
       .pill { padding: 0px 8px; }
@@ -1181,14 +1181,28 @@
       .hero-sub { font-size: 0.92rem; margin-bottom: 32px; }
       .hero-actions { gap: 10px; }
       .logo-track { animation-duration: 22s; }
+    }
+    @media (max-width: 1440px) {
       .logo-ticker-below-hero {
         position: relative !important;
         bottom: auto !important;
         left: auto !important;
         transform: none !important;
         width: 100% !important;
+        max-width: 100% !important;
         background: #fff !important;
-        padding: 20px 0 !important;
+        padding: 24px 0 !important;
+        border-top: 1px solid rgba(243,109,212,0.10);
+        border-bottom: 1px solid rgba(243,109,212,0.10);
+      }
+      .logo-ticker-below-hero .cls-1 {
+        fill: #1a1a1a !important;
+      }
+      .logo-ticker-below-hero .logo-set svg {
+        filter:
+          drop-shadow(0 0 3px rgba(243,109,212,0.22))
+          drop-shadow(0 0 6px rgba(243,109,212,0.10));
+        opacity: 0.75;
       }
     }
     @media (max-width: 440px) {
@@ -1367,8 +1381,8 @@
       }
     })();
 
-    // Mobile : déplace le logo-ticker après la section hero
-    if (window.innerWidth <= 768) {
+    // ≤ 1440px (15" et moins) : déplace le logo-ticker après le hero
+    if (window.innerWidth <= 1440) {
       var ticker = document.querySelector('.logo-ticker');
       var hero   = document.getElementById('hero');
       ticker.classList.add('logo-ticker-below-hero');
@@ -2043,6 +2057,7 @@
       cwForm.reset();
     }, 4000);
   });
+
 </script>
 </body>
 </html>
