@@ -1976,6 +1976,12 @@
       // Masque en scrollant vers le bas, réaffiche en scrollant vers le haut
       if (currentY > lastScrollY && currentY > 100) {
         nav.classList.add('nav-hidden');
+        // Mobile/tablette : ferme le drawer immédiatement
+        if (window.innerWidth <= 768) {
+          drawer.classList.remove('open');
+          ham.classList.remove('open');
+          ham.setAttribute('aria-expanded', false);
+        }
       } else if (currentY < lastScrollY) {
         nav.classList.remove('nav-hidden');
       }
@@ -1983,7 +1989,15 @@
 
       // Réaffiche automatiquement après 800ms d'inactivité
       clearTimeout(scrollStopTimer);
-      scrollStopTimer = setTimeout(() => nav.classList.remove('nav-hidden'), 800);
+      scrollStopTimer = setTimeout(() => {
+        nav.classList.remove('nav-hidden');
+        // Ferme le drawer quand la nav revient
+        if (window.innerWidth <= 768) {
+          drawer.classList.remove('open');
+          ham.classList.remove('open');
+          ham.setAttribute('aria-expanded', false);
+        }
+      }, 800);
 
       scrollRaf = false;
     });
