@@ -1135,6 +1135,17 @@
     .cw-status-dot { width: 6px; height: 6px; border-radius: 50%; background: #4caf7d; }
     .cw-title { font-size: 1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
     .cw-sub { font-size: 0.78rem; color: var(--text-muted); line-height: 1.55; margin-top: 1px; }
+    .cw-close-btn {
+      display: none;
+      align-items: center; justify-content: center;
+      margin-left: auto; flex-shrink: 0;
+      width: 30px; height: 30px;
+      background: rgba(243,109,212,0.10);
+      border: none; border-radius: 50%;
+      color: var(--pink); cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .cw-close-btn:hover { background: rgba(243,109,212,0.22); transform: scale(1.1); }
     .cw-body { padding: 20px 24px 24px; }
     .cw-field { margin-bottom: 12px; }
     .cw-field label {
@@ -1207,6 +1218,16 @@
           drop-shadow(0 0 6px rgba(243,109,212,0.10));
         opacity: 0.75;
       }
+    }
+    @media (min-width: 769px) and (max-width: 1440px) {
+      .cw-close-btn { display: flex; }
+      #contact-widget { bottom: 88px; }
+      .cw-header { padding: 14px 20px 10px; }
+      .cw-body { padding: 12px 20px 16px; }
+      .cw-field { margin-bottom: 8px; }
+      .cw-field input, .cw-field textarea { padding: 8px 11px; font-size: 0.84rem; }
+      .cw-field textarea { height: 66px; }
+      .cw-submit { padding: 10px 16px; margin-top: 2px; }
     }
     @media (max-width: 440px) {
       #contact-widget { width: calc(100vw - 32px); right: 16px; bottom: 88px; }
@@ -1866,6 +1887,9 @@
         <div class="cw-title">Anthony</div>
         <div class="cw-role">Cofondateur</div>
       </div>
+      <button class="cw-close-btn" id="cw-close-btn" aria-label="Fermer">
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M1 1l9 9M10 1L1 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
     </div>
     <p class="cw-sub">Parlons de votre projet, réponse sous 24h.</p>
   </div>
@@ -2053,6 +2077,15 @@
       bubble.setAttribute('aria-expanded', false);
     }
   });
+
+  const cwCloseBtn = document.getElementById('cw-close-btn');
+  if (cwCloseBtn) {
+    cwCloseBtn.addEventListener('click', () => {
+      widget.classList.remove('open');
+      bubble.classList.remove('open');
+      bubble.setAttribute('aria-expanded', false);
+    });
+  }
 
   // ── Contact section form ──
   const cfForm    = document.getElementById('cf-form');
