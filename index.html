@@ -1968,12 +1968,14 @@
   let scrollRaf = false;
   let lastScrollY = window.scrollY;
   let scrollStopTimer = null;
+  let scrollDownAccum = 0; // accumulateur mobile uniquement
 
   window.addEventListener('scroll', () => {
     if (scrollRaf) return;
     scrollRaf = true;
     requestAnimationFrame(() => {
       const currentY = window.scrollY;
+      const isMobile = window.innerWidth <= 768;
 
       nav.classList.toggle('scrolled', currentY > 24);
       totop.classList.toggle('show', currentY > 440);
@@ -1981,14 +1983,19 @@
 
       // Masque en scrollant vers le bas, réaffiche en scrollant vers le haut
       if (currentY > lastScrollY && currentY > 100) {
-        nav.classList.add('nav-hidden');
-        // Mobile/tablette : ferme le drawer immédiatement
-        if (window.innerWidth <= 768) {
-          drawer.classList.remove('open');
-          ham.classList.remove('open');
-          ham.setAttribute('aria-expanded', false);
+        if (isMobile) {
+          scrollDownAccum += currentY - lastScrollY;
+          if (scrollDownAccum >= 30) {
+            nav.classList.add('nav-hidden');
+            drawer.classList.remove('open');
+            ham.classList.remove('open');
+            ham.setAttribute('aria-expanded', false);
+          }
+        } else {
+          nav.classList.add('nav-hidden');
         }
       } else if (currentY < lastScrollY) {
+        scrollDownAccum = 0;
         nav.classList.remove('nav-hidden');
       }
       lastScrollY = currentY;
@@ -1996,6 +2003,7 @@
       // Réaffiche automatiquement après 800ms d'inactivité
       clearTimeout(scrollStopTimer);
       scrollStopTimer = setTimeout(() => {
+        scrollDownAccum = 0;
         nav.classList.remove('nav-hidden');
         // Ferme le drawer quand la nav revient
         if (window.innerWidth <= 768) {
