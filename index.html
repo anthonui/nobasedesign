@@ -219,7 +219,11 @@
       outline: 1px solid rgba(255,255,255,0.16);
       outline-offset: -1px;
 
-      transition: background 0.4s ease, box-shadow 0.4s ease;
+      transition: background 0.4s ease, box-shadow 0.4s ease, transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #nav.nav-hidden {
+      transform: translateX(-50%) translateY(calc(-100% - 20px));
     }
 
     /* Reflet spéculaire diagonal — la "vitre" */
@@ -1939,13 +1943,31 @@
   }
 
   let scrollRaf = false;
+  let lastScrollY = window.scrollY;
+  let scrollStopTimer = null;
+
   window.addEventListener('scroll', () => {
     if (scrollRaf) return;
     scrollRaf = true;
     requestAnimationFrame(() => {
-      nav.classList.toggle('scrolled', window.scrollY > 24);
-      totop.classList.toggle('show', window.scrollY > 440);
+      const currentY = window.scrollY;
+
+      nav.classList.toggle('scrolled', currentY > 24);
+      totop.classList.toggle('show', currentY > 440);
       updateNavTheme();
+
+      // Masque en scrollant vers le bas, réaffiche en scrollant vers le haut
+      if (currentY > lastScrollY && currentY > 100) {
+        nav.classList.add('nav-hidden');
+      } else if (currentY < lastScrollY) {
+        nav.classList.remove('nav-hidden');
+      }
+      lastScrollY = currentY;
+
+      // Réaffiche automatiquement après 800ms d'inactivité
+      clearTimeout(scrollStopTimer);
+      scrollStopTimer = setTimeout(() => nav.classList.remove('nav-hidden'), 800);
+
       scrollRaf = false;
     });
   }, { passive: true });
