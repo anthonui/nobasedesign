@@ -1221,13 +1221,7 @@
     }
     @media (min-width: 769px) and (max-width: 1440px) {
       .cw-close-btn { display: flex; }
-      #contact-widget { bottom: 88px; }
-      .cw-header { padding: 14px 20px 10px; }
-      .cw-body { padding: 12px 20px 16px; }
-      .cw-field { margin-bottom: 8px; }
-      .cw-field input, .cw-field textarea { padding: 8px 11px; font-size: 0.84rem; }
-      .cw-field textarea { height: 66px; }
-      .cw-submit { padding: 10px 16px; margin-top: 2px; }
+      #contact-widget.open { bottom: 28px; }
     }
     @media (max-width: 440px) {
       #contact-widget { width: calc(100vw - 32px); right: 16px; bottom: 88px; }
@@ -2063,28 +2057,42 @@
     } catch(e) {}
   }
 
+  function isCompactDesktop() {
+    return window.innerWidth >= 769 && window.innerWidth <= 1440;
+  }
+
+  function openWidget() {
+    widget.classList.add('open');
+    bubble.classList.add('open');
+    bubble.setAttribute('aria-expanded', true);
+    if (isCompactDesktop()) { bubble.style.opacity = '0'; bubble.style.pointerEvents = 'none'; }
+    playOpenSound();
+  }
+
+  function closeWidget() {
+    widget.classList.remove('open');
+    bubble.classList.remove('open');
+    bubble.setAttribute('aria-expanded', false);
+    bubble.style.opacity = ''; bubble.style.pointerEvents = '';
+  }
+
   bubble.addEventListener('click', () => {
-    const open = widget.classList.toggle('open');
-    bubble.classList.toggle('open', open);
-    bubble.setAttribute('aria-expanded', open);
-    if (open) playOpenSound();
+    if (widget.classList.contains('open')) {
+      closeWidget();
+    } else {
+      openWidget();
+    }
   });
 
   document.addEventListener('click', e => {
     if (!widget.contains(e.target) && !bubble.contains(e.target)) {
-      widget.classList.remove('open');
-      bubble.classList.remove('open');
-      bubble.setAttribute('aria-expanded', false);
+      closeWidget();
     }
   });
 
   const cwCloseBtn = document.getElementById('cw-close-btn');
   if (cwCloseBtn) {
-    cwCloseBtn.addEventListener('click', () => {
-      widget.classList.remove('open');
-      bubble.classList.remove('open');
-      bubble.setAttribute('aria-expanded', false);
-    });
+    cwCloseBtn.addEventListener('click', () => closeWidget());
   }
 
   // ── Contact section form ──
