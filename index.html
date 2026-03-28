@@ -1059,6 +1059,14 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 38px rgba(243,109,212,0.52);
     }
+    @keyframes contact-nudge {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-5px); }
+      40%     { transform: translateX(5px); }
+      60%     { transform: translateX(-3px); }
+      80%     { transform: translateX(3px); }
+    }
+    #contact-bubble.nudge { animation: contact-nudge 0.55s ease-in-out; }
     #contact-bubble .cb-label {
       font-family: 'Montserrat', sans-serif;
       font-size: 0.8rem; font-weight: 700;
@@ -1966,6 +1974,15 @@
   // ── Floating contact widget ──
   const bubble  = document.getElementById('contact-bubble');
   const widget  = document.getElementById('contact-widget');
+
+  // Nudge périodique toutes les 8s (sauf si ouvert ou hover)
+  setTimeout(function nudge() {
+    if (!bubble.classList.contains('open')) {
+      bubble.classList.add('nudge');
+      setTimeout(() => bubble.classList.remove('nudge'), 600);
+    }
+    setTimeout(nudge, 8000);
+  }, 5000);
   const cwForm  = document.getElementById('cw-form');
   const cwSucc  = document.getElementById('cw-success');
 
