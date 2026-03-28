@@ -362,6 +362,7 @@
     @media (max-width: 860px) {
       .nav-links, #nav-cta { display: none; }
       .ham { display: flex; }
+      .nav-inner { display: flex; justify-content: space-between; align-items: center; }
     }
 
     /* ══════════════════════════
@@ -373,10 +374,11 @@
       padding: calc(var(--nav-h) + 64px) 0 80px;
       position: relative; overflow: hidden;
       background:
-        radial-gradient(ellipse 110% 90% at 50% 110%, rgba(249,196,234,.08) 0%, transparent 55%),
-        radial-gradient(ellipse 80%  70% at 15%  10%, rgba(249,196,234,.08) 0%, transparent 55%),
-        radial-gradient(ellipse 60%  50% at 90%  20%, rgba(253,232,247,.06) 0%, transparent 50%),
-        url('Hero@2x.png') center / cover no-repeat;
+        radial-gradient(ellipse 110% 90% at 50% 110%, rgba(249,196,234,.18) 0%, transparent 55%),
+        radial-gradient(ellipse 80%  70% at 15%  10%, rgba(249,196,234,.18) 0%, transparent 55%),
+        radial-gradient(ellipse 60%  50% at 90%  20%, rgba(253,232,247,.14) 0%, transparent 50%),
+        linear-gradient(rgba(255,242,252,0.68), rgba(255,242,252,0.68)),
+        url('images_backgroung/annie-spratt-QckxruozjRg-unsplash (1).webp') center / cover no-repeat;
     }
     #hero::before {
       content: '';
@@ -462,8 +464,8 @@
       color: var(--white);
     }
     .hero-sub {
-      font-size: 1rem; line-height: 1.75; color: var(--text-muted);
-      max-width: 680px; margin-bottom: 40px;
+      font-size: 1rem; line-height: 1.75; color: var(--text);
+      max-width: 680px; margin-bottom: 40px; font-weight: 500;
     }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
     .hero-badge-row {
@@ -471,9 +473,7 @@
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: var(--white); border-radius: var(--radius-pill);
-      padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted);
-      box-shadow: var(--shadow-sm);
+      padding: 8px 16px; font-size: 0.75rem; font-weight: 700; color: var(--white);
     }
     .hero-badge-dot { width: 7px; height: 7px; border-radius: 50%; }
     .dot-pink   { background: var(--pink); }
@@ -488,10 +488,9 @@
       left: 50%;
       transform: translateX(-50%);
       width: 100vw;
-      max-width: 1280px;
+      max-width: 1440px;
       overflow: hidden;
-      background: rgba(255, 255, 255, 1);
-      backdrop-filter: blur(2px);
+      background: transparent;
       border-top: 1px solid rgba(243, 109, 212, 0.15);
       padding: 16px 0;
       z-index: 3;
@@ -585,7 +584,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: url('compagnons-YZ_V9z8NEqY-unsplash.jpg') center/cover no-repeat;
+      background: url('img_cards/compagnons-YZ_V9z8NEqY-unsplash.webp') center/cover no-repeat;
       opacity: 0.45;
       mix-blend-mode: soft-light;
       pointer-events: none;
@@ -602,7 +601,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: url('william-hook-9e9PD9blAto-unsplash.jpg') center/cover no-repeat;
+      background: url('img_cards/william-hook-9e9PD9blAto-unsplash.webp') center/cover no-repeat;
       opacity: 0.45;
       mix-blend-mode: soft-light;
       pointer-events: none;
@@ -618,7 +617,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: url('balazs-ketyi-_x335IZXxfc-unsplash (2).jpg') center/cover no-repeat;
+      background: url('img_cards/balazs-ketyi-LPWl2pEVGKc-unsplash.webp') center/cover no-repeat;
       opacity: 0.45;
       mix-blend-mode: soft-light;
       pointer-events: none;
@@ -696,7 +695,8 @@
       padding: 104px 0;
       background:
         radial-gradient(ellipse 80% 60% at 90% 80%, rgba(243,109,212,.08) 0%, transparent 55%),
-        var(--pink-lightest);
+        linear-gradient(to right, rgba(254,245,252,0.68) 0%, rgba(254,245,252,0.88) 50%, rgba(254,245,252,1) 72%),
+        url('images_backgroung/firmbee-com-gcsNOsPEXfs-unsplash (1).webp') left center / cover no-repeat;
     }
     .process-header { text-align: center; margin-bottom: 60px; }
     .process-header .section-sub { margin: 14px auto 0; }
@@ -1173,6 +1173,7 @@
     <div class="nav-inner">
 
       <!-- Logo avec O animé -->
+      <a href="#" aria-label="Retour en haut de page" style="display:flex;align-items:center;line-height:0;">
       <svg class="logo-svg logo-anim" viewBox="0 0 595.28 162.01" xmlns="http://www.w3.org/2000/svg" aria-label="Nobase" focusable="false">
           <!-- Yellow dot -->
           <path class="logo-dot" d="M567.64,137.63c0-2.9,2.35-5.26,5.25-5.26h11.78c2.9,0,5.25,2.35,5.25,5.26v11.77c0,2.9-2.35,5.26-5.25,5.26h-11.78c-2.91,0-5.25-2.35-5.25-5.26V137.63z"/>
@@ -1196,6 +1197,7 @@
           <!-- N -->
           <path fill="#f36dd4" d="M6.16,12.72c0-2.9,2.35-5.26,5.26-5.26H31.1c2.4,0,4.5,1.63,5.09,3.96l21.44,83.97c0.03,0.1,0.12,0.18,0.23,0.18c0.13,0,0.24-0.11,0.24-0.24V12.72c0-2.9,2.35-5.26,5.26-5.26h10.09c2.9,0,5.26,2.35,5.26,5.26V149.4c0,2.9-2.35,5.26-5.26,5.26H59.02c-2.4,0-4.49-1.62-5.09-3.94L27.24,47.38c-0.03-0.1-0.12-0.18-0.23-0.18c-0.13,0-0.24,0.11-0.24,0.24V149.4c0,2.9-2.35,5.26-5.26,5.26H11.42c-2.9,0-5.26-2.35-5.26-5.26V12.72z"/>
       </svg>
+      </a>
 
       <ul class="nav-links" role="list" aria-label="Liens de navigation">
         <li><a href="#portfolio">Nos réalisations</a></li>
