@@ -136,6 +136,40 @@
     .c-teal  { color: var(--teal-dark); }
     .c-olive { color: var(--olive); }
 
+    /* ── LOGO ── */
+    .logo-svg {
+      display: block;
+      height: 30px;
+      width: auto;
+      cursor: pointer;
+      transform-origin: center;
+    }
+    @keyframes diag-color {
+      0%   { fill: #83ABAB; stroke: #83ABAB; }
+      33%  { fill: #fedc5a; stroke: #fedc5a; }
+      66%  { fill: #f36dd4; stroke: #f36dd4; }
+      100% { fill: #83ABAB; stroke: #83ABAB; }
+    }
+    .logo-diag {
+      animation: diag-color 6s ease-in-out infinite;
+    }
+    .logo-dot {
+      animation: diag-color 6s ease-in-out infinite;
+      animation-delay: -2s;
+    }
+    @keyframes logo-jelly {
+      0%   { transform: scale(1)    rotate(0deg);    }
+      15%  { transform: scale(1.08) rotate(-2deg);   }
+      35%  { transform: scale(0.96) rotate(1.5deg);  }
+      55%  { transform: scale(1.04) rotate(-0.8deg); }
+      75%  { transform: scale(0.99) rotate(0.3deg);  }
+      90%  { transform: scale(1.01) rotate(-0.1deg); }
+      100% { transform: scale(1)    rotate(0deg);    }
+    }
+    .logo-svg:hover {
+      animation: logo-jelly 0.9s ease-in-out forwards;
+    }
+
     /* ══════════════════════════
        NAV
     ══════════════════════════ */
