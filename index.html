@@ -2516,15 +2516,39 @@
     }, 5000);
   });
 
-  cwForm.addEventListener('submit', e => {
+  cwForm.addEventListener('submit', async e => {
     e.preventDefault();
-    cwForm.style.display = 'none';
-    cwSucc.style.display = 'block';
-    setTimeout(() => {
-      cwSucc.style.display = 'none';
-      cwForm.style.display = 'block';
-      cwForm.reset();
-    }, 4000);
+    const submitBtn = cwForm.querySelector('.cw-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours…';
+
+    const name    = document.getElementById('cw-name').value.trim();
+    const email   = document.getElementById('cw-email').value.trim();
+    const message = document.getElementById('cw-msg').value.trim();
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (res.ok) {
+        cwForm.style.display = 'none';
+        cwSucc.style.display = 'block';
+        setTimeout(() => {
+          cwSucc.style.display = 'none';
+          cwForm.style.display = 'block';
+          cwForm.reset();
+        }, 4000);
+      } else {
+        submitBtn.textContent = 'Erreur, réessayez';
+        submitBtn.disabled = false;
+      }
+    } catch {
+      submitBtn.textContent = 'Erreur, réessayez';
+      submitBtn.disabled = false;
+    }
   });
 
 </script>
