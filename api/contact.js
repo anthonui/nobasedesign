@@ -40,7 +40,7 @@ export default async function handler(req, res) {
   }
 
   // ── 1. Anti-bot honeypot ──
-  const { name, email, message, website } = req.body || {};
+  const { name, email, message, projectType, website } = req.body || {};
   if (website) {
     // Bot détecté : on répond 200 pour ne pas lui révéler qu'il est bloqué
     return res.status(200).json({ success: true });
@@ -70,6 +70,7 @@ export default async function handler(req, res) {
   // ── 6. Sanitisation HTML ──
   const safeName    = escapeHtml(name.trim());
   const safeEmail   = escapeHtml(email.trim());
+  const safeType    = projectType ? escapeHtml(String(projectType).trim()) : '';
   const safeMessage = escapeHtml(message.trim()).replace(/\n/g, '<br>');
 
   // ── 7. Vérification clé API ──
@@ -91,7 +92,7 @@ export default async function handler(req, res) {
         from:     'Nobase <contact@nobasedesign.com>',
         to:       contactEmail,
         reply_to: safeEmail,
-        subject:  `Nouveau message de ${safeName} via nobasedesign.com`,
+        subject:  `Nouveau message de ${safeName}${safeType ? ' (' + safeType + ')' : ''} via nobasedesign.com`,
         html: `
           <div style="font-family:'Helvetica Neue',sans-serif;max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #f0e0f8;">
             <div style="background:linear-gradient(135deg,#f36dd4,#c94fb8);padding:28px 32px;">
@@ -108,6 +109,10 @@ export default async function handler(req, res) {
                   <td style="padding:10px 0;border-bottom:1px solid #f5edf9;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b06aab;">Email</td>
                   <td style="padding:10px 0;border-bottom:1px solid #f5edf9;font-size:0.95rem;color:#2c2c3e;"><a href="mailto:${safeEmail}" style="color:#f36dd4;text-decoration:none;">${safeEmail}</a></td>
                 </tr>
+                ${safeType ? `<tr>
+                  <td style="padding:10px 0;border-bottom:1px solid #f5edf9;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b06aab;">Projet</td>
+                  <td style="padding:10px 0;border-bottom:1px solid #f5edf9;font-size:0.95rem;color:#2c2c3e;font-weight:600;"><span style="background:#fef5fc;color:#c94fb8;padding:4px 12px;border-radius:20px;font-size:0.82rem;">${safeType}</span></td>
+                </tr>` : ''}
                 <tr>
                   <td style="padding:14px 0 0;vertical-align:top;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#b06aab;">Message</td>
                   <td style="padding:14px 0 0;font-size:0.95rem;color:#2c2c3e;line-height:1.65;">${safeMessage}</td>

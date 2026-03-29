@@ -2035,6 +2035,7 @@
             <label for="cf-msg">Décrivez votre projet</label>
             <textarea id="cf-msg" placeholder="Partagez votre idée, vos contraintes, votre calendrier…"></textarea>
           </div>
+          <input type="text" name="website" id="cf-honey" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" tabindex="-1" aria-hidden="true">
           <button type="submit" class="cf-submit">Envoyer ma demande →</button>
           <p class="cf-note">Aucun engagement. Nous vous répondons sous 24h ouvrées.</p>
         </form>
@@ -2507,15 +2508,44 @@
   // ── Contact section form ──
   const cfForm    = document.getElementById('cf-form');
   const cfSuccess = document.getElementById('cf-success');
-  cfForm.addEventListener('submit', e => {
+  cfForm.addEventListener('submit', async e => {
     e.preventDefault();
-    cfForm.style.display = 'none';
-    cfSuccess.style.display = 'block';
-    setTimeout(() => {
-      cfSuccess.style.display = 'none';
-      cfForm.style.display = 'block';
-      cfForm.reset();
-    }, 5000);
+    const submitBtn = cfForm.querySelector('.cf-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours…';
+
+    const name    = document.getElementById('cf-name').value.trim();
+    const email   = document.getElementById('cf-email').value.trim();
+    const type    = document.getElementById('cf-type').value;
+    const message = document.getElementById('cf-msg').value.trim();
+    const website = document.getElementById('cf-honey').value;
+
+    try {
+      const res = await fetch(window.location.origin + '/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message, projectType: type, website }),
+        redirect: 'follow',
+      });
+
+      if (res.ok) {
+        cfForm.style.display = 'none';
+        cfSuccess.style.display = 'block';
+        setTimeout(() => {
+          cfSuccess.style.display = 'none';
+          cfForm.style.display = 'block';
+          cfForm.reset();
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Envoyer ma demande →';
+        }, 5000);
+      } else {
+        submitBtn.textContent = 'Erreur, réessayez';
+        submitBtn.disabled = false;
+      }
+    } catch {
+      submitBtn.textContent = 'Erreur, réessayez';
+      submitBtn.disabled = false;
+    }
   });
 
   cwForm.addEventListener('submit', async e => {
