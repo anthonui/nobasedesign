@@ -14,6 +14,7 @@
   <title>Nobase | Agence de Développement Web & Mobile à Toulon, Var, PACA</title>
   <meta name="description" content="Nobase, agence de développement web et mobile à Toulon (Var, PACA). Applications sur mesure, sécurisées et scalables pour entreprises et startups. De la conception à la mise en production.">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com; frame-src https://lookerstudio.google.com; img-src 'self' data: https:;">
   <link rel="canonical" href="https://nobasedesign.com/">
   <meta name="author" content="Nobase">
   <meta name="theme-color" content="#f36dd4">
@@ -2264,6 +2265,7 @@
         <label for="cw-msg">Votre message</label>
         <textarea id="cw-msg" placeholder="Décrivez brièvement votre projet…"></textarea>
       </div>
+      <input type="text" name="website" id="cw-honey" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" tabindex="-1" aria-hidden="true">
       <button type="submit" class="cw-submit">Envoyer le message &rarr;</button>
     </form>
     <div class="cw-success" id="cw-success">
@@ -2525,12 +2527,13 @@
     const name    = document.getElementById('cw-name').value.trim();
     const email   = document.getElementById('cw-email').value.trim();
     const message = document.getElementById('cw-msg').value.trim();
+    const website = document.getElementById('cw-honey').value;
 
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message }),
+        body: JSON.stringify({ name, email, message, website }),
       });
 
       if (res.ok) {

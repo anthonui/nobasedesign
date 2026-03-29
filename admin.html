@@ -231,18 +231,49 @@
   </div>
 
   <script>
-    const PASSWORD = 'nobase2026';
+    function verifyToken(token) {
+      if (!token) return false;
+      const parts = token.split('.');
+      if (parts.length !== 2) return false;
+      const [payload] = parts;
+      const [, expiry] = payload.split(':');
+      return Date.now() < parseInt(expiry, 10);
+    }
 
-    function checkLogin() {
-      const val = document.getElementById('pwd').value;
+    async function checkLogin() {
+      const val = document.getElementById('pwd').value.trim();
       const err = document.getElementById('error-msg');
-      if (val === PASSWORD) {
-        sessionStorage.setItem('nb_admin', '1');
-        showDashboard();
-      } else {
+      const btn = document.querySelector('.login-btn');
+
+      if (!val) return;
+      btn.disabled = true;
+      btn.textContent = 'Vérification…';
+      err.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: val }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          sessionStorage.setItem('nb_admin_token', data.token);
+          showDashboard();
+        } else {
+          err.textContent = data.error || 'Mot de passe incorrect.';
+          err.style.display = 'block';
+          document.getElementById('pwd').value = '';
+          document.getElementById('pwd').focus();
+        }
+      } catch {
+        err.textContent = 'Erreur réseau, réessayez.';
         err.style.display = 'block';
-        document.getElementById('pwd').value = '';
-        document.getElementById('pwd').focus();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Accéder au dashboard';
       }
     }
 
@@ -252,14 +283,15 @@
     }
 
     function logout() {
-      sessionStorage.removeItem('nb_admin');
+      sessionStorage.removeItem('nb_admin_token');
       document.getElementById('login-screen').style.display = 'flex';
       document.getElementById('dashboard-screen').style.display = 'none';
       document.getElementById('pwd').value = '';
     }
 
-    // Auto-login si déjà connecté dans la session
-    if (sessionStorage.getItem('nb_admin') === '1') showDashboard();
+    // Auto-login si token valide en session
+    const existingToken = sessionStorage.getItem('nb_admin_token');
+    if (verifyToken(existingToken)) showDashboard();
   </script>
 
 </body>
