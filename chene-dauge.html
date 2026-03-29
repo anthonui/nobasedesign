@@ -371,10 +371,22 @@
     ══════════════════════════ */
     #project-hero {
       padding: calc(var(--nav-h) + 80px) 0 96px;
-      background:
-        radial-gradient(ellipse 80% 60% at 10% 20%, rgba(107,124,62,0.06) 0%, transparent 55%),
-        radial-gradient(ellipse 70% 60% at 90% 80%, rgba(249,196,234,0.08) 0%, transparent 55%),
-        var(--white);
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+    }
+    #project-hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: url("CHêne d'auge maquettes/rich-kantita-MN7nwUo8jwk-unsplash.webp") center/cover no-repeat;
+      opacity: 0.32;
+      filter: saturate(0.5) brightness(1.1);
+      mask-image: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 65%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 65%, transparent 100%);
+    }
+    #project-hero > .container {
+      position: relative;
+      z-index: 1;
     }
     .hero-back {
       display: inline-flex; align-items: center; gap: 8px;
