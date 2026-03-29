@@ -88,7 +88,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from:     'Nobase Contact <onboarding@resend.dev>',
+        from:     'Nobase <contact@nobasedesign.com>',
         to:       contactEmail,
         reply_to: safeEmail,
         subject:  `Nouveau message de ${safeName} via nobasedesign.com`,
