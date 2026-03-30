@@ -1871,21 +1871,21 @@
       </div>
       <div class="feat-list">
         <div class="feat rev d1">
-          <div class="feat-icon fi-t"><img src="cc8ee59acf92c8da3b1006e32d1b9b7d9e2ced37.svg" width="22" height="22" alt="Icône optimisation des processus" loading="lazy" decoding="async"></div>
+          <div class="feat-icon fi-t"><img src="cc8ee59acf92c8da3b1006e32d1b9b7d9e2ced37.svg" width="22" height="22" alt="Icône optimisation des processus" loading="eager" decoding="async"></div>
           <div>
             <h3>Optimiser</h3>
             <p>Nous analysons et rationalisons vos processus pour maximiser la performance et réduire les coûts opérationnels de votre activité.</p>
           </div>
         </div>
         <div class="feat rev d2">
-          <div class="feat-icon fi-p"><img src="ec48eb75a6cdf5efee7c511de6b4c8a9b54d2d27.svg" width="22" height="22" alt="Icône automatisation intelligente" loading="lazy" decoding="async"></div>
+          <div class="feat-icon fi-p"><img src="ec48eb75a6cdf5efee7c511de6b4c8a9b54d2d27.svg" width="22" height="22" alt="Icône automatisation intelligente" loading="eager" decoding="async"></div>
           <div>
             <h3>Automatiser</h3>
             <p>Libérez vos équipes des tâches répétitives grâce à des solutions d'automatisation intelligentes, intégrées à vos outils existants.</p>
           </div>
         </div>
         <div class="feat rev d3">
-          <div class="feat-icon fi-y"><img src="1225c1e20c8210dd74c6370a2be59925818fba2f.svg" width="22" height="22" alt="Icône simplification des interfaces" loading="lazy" decoding="async"></div>
+          <div class="feat-icon fi-y"><img src="1225c1e20c8210dd74c6370a2be59925818fba2f.svg" width="22" height="22" alt="Icône simplification des interfaces" loading="eager" decoding="async"></div>
           <div>
             <h3>Simplifier</h3>
             <p>Nous concevons des interfaces intuitives et des architectures lisibles pour que vos équipes et clients adoptent naturellement vos outils.</p>
@@ -2352,7 +2352,7 @@
 <div id="contact-widget" role="dialog" aria-modal="false" aria-label="Formulaire de contact">
   <div class="cw-header">
     <div class="cw-header-top">
-      <img class="cw-avatar" src="Fichier 31.webp" alt="Anthony" loading="lazy" decoding="async">
+      <img class="cw-avatar" src="Fichier 31.webp" alt="Anthony" loading="eager" decoding="async">
       <div>
         <div class="cw-status"><span class="cw-status-dot"></span>En ligne</div>
         <div class="cw-title">Anthony</div>
@@ -2703,29 +2703,47 @@
     const splashLogo = document.getElementById('splash-logo');
     if (!splash || !splashLogo) return;
 
+    const startTime = Date.now();
+    const MIN_SPLASH = 2200; // durée minimum du splash (ms)
+    let pageLoaded = false;
+
     // Phase 1 : après l'animation d'entrée (0.8s), lancer le pulse
     setTimeout(function() {
       splashLogo.classList.add('pulse');
     }, 800);
 
-    // Phase 2 : après ~2.2s total, lancer l'animation de sortie
-    setTimeout(function() {
+    // Fonction de sortie du splash
+    function exitSplash() {
+      // Animation de sortie du logo
       splashLogo.classList.remove('pulse');
       splashLogo.classList.add('out');
-    }, 2200);
 
-    // Phase 3 : après la sortie du logo (0.6s), masquer le splash et révéler le site
-    setTimeout(function() {
-      document.body.classList.remove('loading');
-      document.body.classList.add('loaded');
-      splash.classList.add('splash-hide');
-
-      // Nettoyer le splash du DOM après la transition
+      // Après la sortie du logo (0.6s), révéler le site
       setTimeout(function() {
-        splash.remove();
-        document.body.classList.remove('loaded');
-      }, 700);
-    }, 2800);
+        document.body.classList.remove('loading');
+        document.body.classList.add('loaded');
+        splash.classList.add('splash-hide');
+
+        // Nettoyer le splash du DOM après la transition
+        setTimeout(function() {
+          splash.remove();
+          document.body.classList.remove('loaded');
+        }, 700);
+      }, 600);
+    }
+
+    // Attendre que TOUT soit chargé (images, fonts, etc.) + durée minimum
+    window.addEventListener('load', function() {
+      pageLoaded = true;
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, MIN_SPLASH - elapsed);
+      setTimeout(exitSplash, remaining);
+    });
+
+    // Sécurité : si le load ne se déclenche pas après 6s, forcer la sortie
+    setTimeout(function() {
+      if (!pageLoaded) exitSplash();
+    }, 6000);
   })();
 
 </script>
