@@ -1549,12 +1549,14 @@
     }
 
     /* Sortie : le logo tourne sur lui-même (face) en rétrécissant */
-    @keyframes splash-out {
-      0%   { opacity: 1; transform: scale(1) rotate(0deg); }
-      25%  { opacity: 1; transform: scale(0.7) rotate(360deg); }
-      50%  { opacity: 0.8; transform: scale(0.4) rotate(720deg); }
-      75%  { opacity: 0.4; transform: scale(0.15) rotate(1080deg); }
-      100% { opacity: 0; transform: scale(0) rotate(1440deg); }
+    @keyframes splash-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(1440deg); }
+    }
+    @keyframes splash-shrink {
+      0%   { opacity: 1; scale: 1; }
+      60%  { opacity: 0.7; }
+      100% { opacity: 0; scale: 0; }
     }
 
     .splash-logo {
@@ -1564,7 +1566,9 @@
       animation: splash-pulse 1.2s ease-in-out infinite;
     }
     .splash-logo.out {
-      animation: splash-out 0.8s cubic-bezier(0.55, 0, 0.15, 1) forwards;
+      animation:
+        splash-spin   1s linear forwards,
+        splash-shrink 1s ease-in forwards;
     }
 
     /* La barre diagonale du O change de couleur aussi dans le splash */
