@@ -688,30 +688,77 @@
     /* ══════════════════════════
        HERO
     ══════════════════════════ */
+    @keyframes aurora-drift-1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      25%      { transform: translate(4%,-6%) scale(1.07); }
+      50%      { transform: translate(-3%,5%) scale(0.95); }
+      75%      { transform: translate(6%,2%) scale(1.04); }
+    }
+    @keyframes aurora-drift-2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33%      { transform: translate(-5%,6%) scale(1.09); }
+      66%      { transform: translate(4%,-4%) scale(0.93); }
+    }
+    @keyframes aurora-drift-3 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      40%      { transform: translate(5%,7%) scale(1.1); }
+      80%      { transform: translate(-4%,-3%) scale(0.96); }
+    }
     #hero {
       min-height: 100vh;
       display: flex; align-items: center;
       padding: calc(var(--nav-h) + 64px) 0 80px;
       position: relative; overflow: hidden;
       background:
-        radial-gradient(ellipse 110% 90% at 50% 110%, rgba(249,196,234,.18) 0%, transparent 55%),
-        radial-gradient(ellipse 80%  70% at 15%  10%, rgba(249,196,234,.18) 0%, transparent 55%),
-        radial-gradient(ellipse 60%  50% at 90%  20%, rgba(253,232,247,.14) 0%, transparent 50%),
-        linear-gradient(rgba(255,242,252,0.45), rgba(255,242,252,0.45)),
+        linear-gradient(rgba(255,242,252,0.32), rgba(255,242,252,0.32)),
         url('images_backgroung/annie-spratt-QckxruozjRg-unsplash (1)_11zon_11zon (1).webp') center / cover no-repeat;
+    }
+    .aurora-wrap {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none; overflow: hidden;
+    }
+    .aurora-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+    }
+    .aurora-b1 {
+      width: 700px; height: 500px;
+      background: rgba(243,109,212,0.38);
+      top: -15%; left: -10%;
+      animation: aurora-drift-1 18s ease-in-out infinite;
+    }
+    .aurora-b2 {
+      width: 620px; height: 620px;
+      background: rgba(131,171,171,0.30);
+      top: 15%; right: -12%;
+      animation: aurora-drift-2 22s ease-in-out infinite;
+    }
+    .aurora-b3 {
+      width: 520px; height: 360px;
+      background: rgba(254,220,90,0.20);
+      bottom: 0; left: 22%;
+      animation: aurora-drift-3 15s ease-in-out infinite;
+    }
+    .aurora-b4 {
+      width: 420px; height: 460px;
+      background: rgba(243,109,212,0.20);
+      bottom: 5%; right: 18%;
+      animation: aurora-drift-1 20s ease-in-out infinite reverse;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .aurora-blob { animation: none; }
     }
     #hero::before {
       content: '';
-      position: absolute;
+      position: absolute; z-index: 2;
       width: 480px; height: 480px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(243,109,212,.18) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(243,109,212,.12) 0%, transparent 70%);
       top: -80px; left: -120px; pointer-events: none;
     }
     #hero::after {
       content: '';
-      position: absolute;
+      position: absolute; z-index: 2;
       width: 360px; height: 360px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(254,220,90,.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(254,220,90,.10) 0%, transparent 70%);
       bottom: -40px; right: -80px; pointer-events: none;
     }
     .hero-inner {
@@ -1790,6 +1837,12 @@
 <main>
 <!-- ══ HERO ══ -->
 <section id="hero">
+  <div class="aurora-wrap" aria-hidden="true">
+    <div class="aurora-blob aurora-b1"></div>
+    <div class="aurora-blob aurora-b2"></div>
+    <div class="aurora-blob aurora-b3"></div>
+    <div class="aurora-blob aurora-b4"></div>
+  </div>
   <div class="container">
     <div class="hero-inner">
       <div class="hero-cursor-wrap rev">
