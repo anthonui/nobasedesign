@@ -608,6 +608,14 @@
     #nav.nav-over-hero .ham span,
     #nav.nav-on-dark .ham span { background: var(--white); }
 
+    /* Logo : lettres roses -> blanches sur hero, retour rose en quittant */
+    #nav .logo-svg path:not(.logo-dot):not(.logo-diag) {
+      transition: fill 0.45s ease;
+    }
+    #nav.nav-over-hero .logo-svg path:not(.logo-dot):not(.logo-diag) {
+      fill: var(--white);
+    }
+
     /* Accessibilité — focus clavier visible */
     .nav-links a:focus-visible {
       outline: 2px solid var(--pink);
