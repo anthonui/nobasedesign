@@ -601,11 +601,11 @@
       transition: opacity var(--tr), color 0.45s ease;
     }
     .nav-links a:hover { opacity: 1; }
-    #nav:not(.scrolled) .nav-links a,
+    #nav.nav-over-hero .nav-links a,
     #nav.nav-on-dark .nav-links a { color: var(--white); }
-    #nav:not(.scrolled) .nav-logo-text,
+    #nav.nav-over-hero .nav-logo-text,
     #nav.nav-on-dark .nav-logo-text { color: var(--white); }
-    #nav:not(.scrolled) .ham span,
+    #nav.nav-over-hero .ham span,
     #nav.nav-on-dark .ham span { background: var(--white); }
 
     /* Accessibilité — focus clavier visible */
@@ -2572,6 +2572,12 @@
   // ── NAV scroll + adaptation couleur ──
   const nav = document.getElementById('nav');
   const totop = document.getElementById('totop');
+
+  // Blanc tant que la nav chevauche le hero
+  const heroSection = document.getElementById('hero');
+  new IntersectionObserver(([entry]) => {
+    nav.classList.toggle('nav-over-hero', entry.isIntersecting);
+  }, { threshold: 0, rootMargin: '0px 0px -100% 0px' }).observe(heroSection);
 
   // ── Adaptation couleur nav ──
   const NAV_MID_Y = 14 + 34; // top fixe + demi-hauteur (px viewport)
