@@ -601,8 +601,11 @@
       transition: opacity var(--tr), color 0.45s ease;
     }
     .nav-links a:hover { opacity: 1; }
+    #nav:not(.scrolled) .nav-links a,
     #nav.nav-on-dark .nav-links a { color: var(--white); }
+    #nav:not(.scrolled) .nav-logo-text,
     #nav.nav-on-dark .nav-logo-text { color: var(--white); }
+    #nav:not(.scrolled) .ham span,
     #nav.nav-on-dark .ham span { background: var(--white); }
 
     /* Accessibilité — focus clavier visible */
