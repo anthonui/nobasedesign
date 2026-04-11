@@ -1,51 +1,70 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Ce fichier guide Claude Code (claude.ai/code) pour travailler sur ce dépôt.
 
-## Deployment
+## Déploiement
 
-- **No build step.** This is a static site deployed via **Vercel** with GitHub auto-deploy on push to `main`.
-- To deploy: `git add <files> && git commit -m "..." && git push origin main`
-- Never push unrelated files (images, SVGs not referenced by index.html, etc.).
+- **Aucune étape de build.** Site statique déployé via **Vercel** avec auto-déploiement GitHub sur push vers `main`.
+- Pour déployer : `git add <fichiers> && git commit -m "..." && git push origin main`
+- Ne jamais pousser de fichiers non référencés (images, SVGs non utilisés dans index.html, etc.).
 
 ## Architecture
 
-Single-page marketing site for **Nobase**, a web/mobile dev agency based in Toulon, France (nobasedesign.com).
+Site marketing one-page pour **Nobase**, agence web & mobile basée à Toulon, France (nobasedesign.com).
 
 ```
-index.html          ← Entire frontend: HTML + CSS + JS in one file (no framework)
-admin.html          ← Protected admin panel
+index.html          <- Frontend complet : HTML + CSS + JS dans un seul fichier (pas de framework)
+admin.html          <- Panel admin protégé
 api/
-  contact.js        ← Vercel serverless function — contact form (Resend API)
-  admin-auth.js     ← Vercel serverless function — admin login (HMAC token, anti-brute-force)
-vercel.json         ← Security headers + CORS config for /api/*
-sitemap.xml         ← References index.html and chene-dauge.html
+  contact.js        <- Fonction serverless Vercel : formulaire de contact (API Resend)
+  admin-auth.js     <- Fonction serverless Vercel : auth admin (token HMAC, anti-brute-force)
+vercel.json         <- Headers de sécurité + config CORS pour /api/*
+sitemap.xml         <- Référence index.html et chene-dauge.html
 robots.txt
+favicon-32.png.png  <- Favicon officiel (logo rose sur fond rose)
 ```
 
-### index.html structure (sections in order)
-Splash screen → Navbar → Hero → Services → Réalisations (cards) → Pricing → Contact form → Footer
+### Structure de index.html (sections dans l'ordre)
+Splash screen -> Navbar -> Hero -> Services -> Réalisations (cards) -> Tarifs -> Formulaire contact -> Footer
 
-All CSS and JS live inline in `index.html`. There is no external stylesheet or bundler.
+Tout le CSS et JS est inline dans `index.html`. Pas de feuille de style externe ni de bundler.
 
 ### API / Serverless
-- `api/contact.js`: validates form input (honeypot, rate limiting 3 req/min/IP, HTML escaping), sends email via Resend. Requires env vars: `RESEND_API_KEY`, `CONTACT_EMAIL`.
-- `api/admin-auth.js`: password auth via SHA-256 hash comparison + HMAC-signed token (8h expiry). Requires env vars: `ADMIN_PASSWORD_HASH`, `ADMIN_TOKEN_SECRET`.
+- `api/contact.js` : validation formulaire (honeypot, rate limiting 3 req/min/IP, échappement HTML), envoi email via Resend. Variables d'env requises : `RESEND_API_KEY`, `CONTACT_EMAIL`.
+- `api/admin-auth.js` : auth par hash SHA-256 + token HMAC signé (expiration 8h). Variables d'env requises : `ADMIN_PASSWORD_HASH`, `ADMIN_TOKEN_SECRET`.
 
 ### SEO
-- Local SEO targeting Toulon and surrounding cities (Var 83 / PACA region).
-- JSON-LD schema in `<head>`: `LocalBusiness`, `Organization`, `WebSite`, `WebPage`, `Service`, `FAQPage`, `AggregateRating`.
-- Geo meta tags: `geo.region`, `geo.placename`, `geo.position`, `ICBM`.
-- Keep all SEO signals in `<head>` and footer only — no visible keyword injection in the body.
+- SEO local ciblant Toulon et les villes du Var 83 / région PACA.
+- JSON-LD dans `<head>` : `LocalBusiness`, `Organization`, `WebSite`, `WebPage`, `Service`, `FAQPage`, `AggregateRating`.
+- `sameAs` dans le JSON-LD pointe vers : Google Maps, Instagram (`nobase_design`), LinkedIn.
+- Balises geo : `geo.region`, `geo.placename`, `geo.position`, `ICBM`.
+- Garder tous les signaux SEO dans `<head>` et le footer uniquement, pas d'injection de mots-clés visible dans le body.
 
-## Writing & copy rules
+## Charte graphique
 
-- **Never use "—" (em dash) anywhere** — not in visible text, meta descriptions, comments, or anywhere else in the project. Use a comma, a colon, or rephrase instead.
+- **Couleurs principales :**
+  - Rose : `#f36dd4` (--pink)
+  - Teal : `#83abab` (--teal)
+  - Jaune : `#fedc5a` (--yellow)
+  - Sombre : `#2c2c3e` (--dark)
+- **Polices :** Montserrat (titres, 800/900) et Nunito Sans (corps, 400/600), chargées depuis Google Fonts.
+- **Tarifs :** Site vitrine dès 900 € HT, Application web dès 2 500 € HT, Application mobile dès 4 000 € HT.
 
-## Key conventions
+## Règles de rédaction & copy
 
-- **Edit `index.html` only** for front-end changes. Always `Read` the file before editing — it's large and drifts easily.
-- The hero background is a `.webp` image with a `linear-gradient` overlay for darkness control. Adjust the overlay opacity (currently `0.45`) to change brightness.
-- Pills (`.pill-pink`, `.pill-yellow`) have `text-shadow: none` intentionally — do not add glow to them.
-- Fonts: **Montserrat** (headings) and **Nunito Sans** (body), loaded from Google Fonts.
-- Animations use the `.rev` class with `d1`–`d4` delay modifiers for staggered reveal on scroll.
+- **Ne jamais utiliser "—" (tiret em dash)** dans les textes visibles, meta descriptions, commentaires ou n'importe où dans le projet. Utiliser une virgule, deux-points ou reformuler.
+
+## Conventions techniques
+
+- **Modifier uniquement `index.html`** pour les changements front-end. Toujours faire `Read` avant d'éditer : le fichier est grand et se désynchronise facilement.
+- **Hero :** fond photo `.webp` + overlay `linear-gradient`. Opacité desktop : `rgba(20,10,30,0.38)`. Opacité mobile (`max-width: 680px`) : `rgba(20,10,30,0.58)`.
+- **Aurora hero :** 4 blobs animés (`.aurora-b1` à `.aurora-b4`) avec `mix-blend-mode: screen`. Opacités desktop : rose `0.43`, teal `0.61`, jaune `0.35`, rose bas `0.46`. Sur mobile les opacités sont drastiquement réduites (`0.06-0.08`) pour éviter un voile coloré.
+- **Navbar :**
+  - Glassmorphism avec `backdrop-filter: blur(44px)`.
+  - Classe `.scrolled` ajoutée après 24px de scroll.
+  - Classe `.nav-over-hero` ajoutée via `IntersectionObserver` tant que la nav chevauche le hero : textes et logo en blanc.
+  - Classe `.nav-on-dark` gérée par détection de luminosité JS pour les autres sections sombres.
+- **Logo SVG :** lettres en `fill="#f36dd4"` (rose). `.logo-dot` et `.logo-diag` ont une animation couleur CSS (`diag-color`, 6s). Sur hero : lettres passent en blanc via `#nav.nav-over-hero .logo-svg path:not(.logo-dot):not(.logo-diag)`.
+- **Pills** (`.pill-pink`, `.pill-yellow`) : `text-shadow: none` intentionnel, ne pas ajouter de glow.
+- **Animations :** classe `.rev` avec modificateurs de délai `d1`-`d4` pour révélation en scroll.
+- **Favicon :** `favicon-32.png.png` (nom doublon conservé tel quel).
